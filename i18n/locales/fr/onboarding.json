@@ -1,0 +1,261 @@
+{
+  "onboarding": {
+    "questions": {
+      "1": {
+        "question": "Comment vous appelez-vous ?",
+        "subtitle": "Ravi de faire votre connaissance !",
+        "placeholder": "Votre prénom..."
+      },
+      "2": {
+        "question": "\"Ce qui ne se mesure pas, ne s'améliore pas.\"",
+        "subtitle": "Le statisticien W. Deming rappelle l'importance de la mesure dans l'amélioration des performances. \n\nHabitus vous permet de mesurer votre productivité et maintenir une stimulation quotidienne.",
+        "buttonText": "Continuer"
+      },
+      "3": {
+        "question": "De quelle nature sont vos objectifs {{firstName}} ?",
+        "subtitle": "Sélectionnez tous ceux qui vous concernent"
+      },
+      "4": {
+        "question": "Pour vos objectifs, vous vous considérez comme :",
+        "subtitle": "{{firstName}}, soyez honnête avec vous-même"
+      },
+      "5": {
+        "question": "Quel statut aimeriez-vous atteindre ?",
+        "subtitle": "Votre ambition à moyen-long terme"
+      },
+      "6": {
+        "question": "Combien de temps vous donnez-vous ?",
+        "subtitle": "Pour atteindre ce statut"
+      },
+      "7": {
+        "question": "À combien êtes-vous loin du {{firstName}} qui se donne au maximum ?",
+        "subtitle": "À cause de votre manque de suivi d'objectifs"
+      },
+      "8": {
+        "question": "Vous savez {{firstName}}, ce n'est pas illégal de ne pas atteindre ses objectifs",
+        "subtitle": "D'ailleurs la plupart des personnes finissent par les oublier et se trouver de bonnes excuses.",
+        "buttonText": "Je suis déterminé."
+      },
+      "9": {
+        "question": "Quelle est votre vraie raison ?",
+        "subtitle": "Pourquoi voulez-vous atteindre vos objectifs ? Soyez brutalement sincère {{firstName}}.",
+        "placeholder": "Je veux réussir parce que..."
+      },
+      "10": {
+        "question": "Deux concepts à connaître : \nles MIT et les MET",
+        "subtitle": "MIT (Most Important Things) : Les missions les plus importantes à accomplir\nMET (Most Evitable Things): Ce que vous devez éviter de faire à tout prix",
+        "buttonText": "J'ai compris"
+      },
+      "11": {
+        "question": "TEST : Écrivez vos MIT pour demain",
+        "subtitle": "3 à 5 choses à faire coûte que coûte (restez réaliste)",
+        "placeholder": "1. Finir le rapport\n2. Faire 30min de sport\n3. ..."
+      },
+      "12": {
+        "question": "Écrivez vos MET pour demain",
+        "subtitle": "1 à 3 choses que vous devez éviter de faire",
+        "placeholder": "1. Scroller sur les réseaux\n2. Regarder Netflix\n3. ..."
+      },
+      "13": {
+        "question": "Contrat de {{firstName}} du présent au {{firstName}} futur",
+        "subtitle": "Je m'engage à me respecter en m'offrant le meilleur cadeau : respecter mon temps sur Terre en suivant mes objectifs.",
+        "placeholder": "Signez ici votre engagement"
+      },
+      "14": {
+        "question": "Ne vous trahissez pas {{firstName}}",
+        "subtitle": "1 semaine gratuite, puis l'équivalent d'un demi Big Mac par mois pour votre accompagnement."
+      }
+    },
+    "options": {
+      "scolaires": "Scolaires",
+      "sportifs": "Sportifs",
+      "business": "Business",
+      "personnels": "Personnels",
+      "a_player": "A-Player",
+      "b_player": "B-Player",
+      "c_player": "C-Player",
+      "s_player": "S-Player",
+      "3mois": "3 mois",
+      "6mois": "6 mois",
+      "1an": "1 an",
+      "2ans": "2 ans",
+      "pasloin": "Pas très loin",
+      "plutotloin": "Plutôt loin",
+      "loin": "Loin",
+      "abusivementloin": "Abusivement loin"
+    },
+    "maxLevel": {
+      "question": "Félicitations {{firstName}} !",
+      "subtitle": "Vous êtes déjà au niveau maximum. Continuons...",
+      "buttonText": "Continuer"
+    }
+  },
+  "welcome": {
+    "quote": {
+      "text": "\"Ce qui ne se mesure pas ne peut s'améliorer\"",
+      "author": "William E. Deming"
+    },
+    "cta": {
+      "title": "À votre tour ?",
+      "subtitle": "Commençons par comprendre vos problèmes et vos motivations avec quelques questions",
+      "button": "Commencer le quiz"
+    }
+  },
+  "offer": {
+    "greeting": "Ok j'ai appris à te connaître {{firstName}}.",
+    "insight": "Je sais ce qui te frustre et te sépare de la meilleure version de {{firstName}} que tous tes proches (et surtout toi-même) rêveraient de voir exister un jour.",
+    "proposition": {
+      "title": "Voici ce que je te propose :"
+    },
+    "promises": {
+      "daily_accountability": "Chaque jour je serai là pour toi. Je te confronterai à tes engagements.",
+      "progress_tracking": "J'enregistrerai méticuleusement tous tes progrès et tes victoires.",
+      "evening_review": "Chaque soir on fera le bilan de ta journée ensemble.",
+      "monthly_assessment": "Chaque mois on célébrera tout ce que tu as réussi à accomplir.",
+      "habit_formation": "Je t'aiderai à transformer tes bonnes intentions en habitudes durables.",
+      "motivation_boost": "Je serai ton coach personnel 24h/24, toujours là pour te remotiver."
+    },
+    "commitment": {
+      "title": "Mon engagement envers toi",
+      "message": "Si tu es prêt(e) à t'investir pour construire la meilleure version de {{firstName}}, alors on commence quand tu veux !"
+    },
+    "guarantee": "7 jours d'essai gratuit - Sans engagement",
+    "cta": {
+      "primary": "C'est parti !",
+      "secondary": "Je suis prêt(e) à changer",
+      "disclaimer": "Annulation possible à tout moment • VALEUR AJOUTÉE CONSIDÉRABLE GARANTIE"
+    }
+  },
+  "signature": {
+    "instructions": {
+      "drawing": "✨ Dessinez votre signature...",
+      "saved": "Signature enregistrée !",
+      "default": "👆 Touchez et glissez pour signer"
+    },
+    "clearButton": "🗑️ Effacer",
+    "commitment": {
+      "title": "Félicitations",
+      "message": "Je vous féliciterai quand vous accomplirez vos objectifs."
+    }
+  },
+  "paywall": {
+    "restore": {
+      "button": "Restaurer les achats",
+      "title": "Restaurer les achats", 
+      "noPurchases": "Aucun achat trouvé à restaurer"
+    },
+    "loadingPlans": "Chargement des forfaits...",
+    "error": {
+      "title": "Erreur",
+      "loadingPackages": "Impossible de charger les forfaits",
+      "purchase": "Achat échoué. Veuillez réessayer.",
+      "restore": "Restauration échouée. Veuillez réessayer."
+    },
+    "welcome": "Parfait {{firstName}} !",
+    "subtitle": "Tu es prêt(e) à transformer ta productivité. Découvre tout ce que Habitus peut faire pour toi.",
+    "benefits": {
+      "title": "Avec Habitus Premium, tu obtiens :",
+      "tracking": {
+        "icon": "📊",
+        "title": "Suivi complet de tes activités",
+        "description": "Traque automatiquement ton temps et tes habitudes"
+      },
+      "ai_coaching": {
+        "icon": "🤖",
+        "title": "Coach IA personnalisé",
+        "description": "Conseils adaptés selon tes performances quotidiennes"
+      },
+      "gamification": {
+        "icon": "🎮",
+        "title": "Gamification avancée",
+        "description": "Système de points, achievements et défis motivants"
+      },
+      "analytics": {
+        "icon": "📈",
+        "title": "Analyses détaillées",
+        "description": "Statistiques complètes sur ta progression"
+      }
+    },
+    "choosePlan": "Choisis ton plan :",
+    "plans": {
+      "weekly": {
+        "duration": "Hebdomadaire"
+      },
+      "monthly": {
+        "duration": "Mensuel"
+      },
+      "yearly": {
+        "duration": "Annuel"
+      }
+    },
+    "prices": {
+      "weekly": {
+        "price": "3,30€",
+        "perDay": "0,47€/jour"
+      },
+      "monthly": {
+        "price": "6,90€",
+        "originalPrice": "13,20€",
+        "perDay": "0,23€/jour"
+      },
+      "yearly": {
+        "price": "69,90€",
+        "originalPrice": "199,80€",
+        "perDay": "0,19€/jour"
+      }
+    },
+    "mostPopular": "LE PLUS POPULAIRE",
+    "perDay": "{{price}}/jour",
+    "startJourney": "Commencer mon parcours",
+    "noCommitment": "Annule à tout moment",
+    "legal": "Paiement sécurisé • Annulation en un clic • Pas d'engagement"
+  },
+  "welcomeToDashboard": {
+    "congrats": "Tu as franchi le premier cap {{firstName}} ! ",
+    "subtitle": "Tu viens de faire le choix de reprendre le contrôle de ta productivité. \nC'est maintenant l'heure de lister tes objectifs de demain.",
+    "responsibility": {
+      "title": "🎯 C'est l'heure des responsabilités",
+      "message": "{{firstName}}, maintenant que tu as pris cet engagement, il est temps de passer à l'action. Chaque jour compte, chaque choix te rapproche de tes objectifs."
+    },
+    "motivation": "Transforme ta routine en machine à succès ! Tu as tous les outils pour réussir.",
+    "startNow": "C'est parti !",
+    "ready": "Prêt(e) à changer ta vie, {{firstName}} ?"
+  },
+  "testimonials": {
+    "laetitia": {
+      "name": "Laëtitia",
+      "role": "Ingénieure en informatique",
+      "quote": "Je suis trop fière de moi quand je vois tous les accomplissements que je coche chaque jour !"
+    },
+    "lisa": {
+      "name": "Lisa",
+      "role": "Étudiante en médecine",
+      "quote": "Hyper utile je sépare beaucoup mieux les temps de travail et de repos"
+    },
+    "sara": {
+      "name": "Sara",
+      "role": "Étudiante en prépa ECS",
+      "quote": "Tellement bien d'avoir ça, le travail passe pour un jeu avec plein de petites missions chaque jour"
+    },
+    "pierre": {
+      "name": "Pierre",
+      "role": "Étudiant en prépa PC*",
+      "quote": "Avec Habitus je ne passe plus un instant sans savoir ce qu'il me reste à faire et ce que j'ai fait"
+    },
+    "lowenn": {
+      "name": "Lowenn",
+      "role": "Entrepreneur",
+      "quote": "Quand je note des trucs sur l'app j'ai plus d'autre choix que d'assumer. Stressant mais efficace 😂"
+    }
+  },
+  "nameInput": {
+    "helpText": "✨ Votre prénom nous permettra de personnaliser votre expérience"
+  },
+  "textInput": {
+    "helpTextWithName": "{{firstName}}, soyez spécifique pour recevoir des conseils personnalisés",
+    "helpTextNoName": "Soyez spécifique pour recevoir des conseils personnalisés"
+  },
+  "debug": {
+    "questionNumber": "Question {{current}}/{{total}} - Type: {{type}}"
+  }
+}

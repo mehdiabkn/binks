@@ -1,0 +1,924 @@
+{
+  "tasks": {
+    "mit": {
+      "title": "Important tasks",
+      "subtitle": "For {{date}}",
+      "emptyTitle": "No important tasks",
+      "emptySubtitle": "Add your 1-5 most important tasks for {{date}}",
+      "progressText": "{{completed}}/{{total}} completed",
+      "stats": {
+        "completed": "{{percentage}}% completed ({{completed}}/{{total}})",
+        "encouragement": {
+          "noTasks": "Perfect! No tasks scheduled.",
+          "perfect": "Perfect! All your tasks are completed!",
+          "excellent": "Excellent control! Keep it up!",
+          "good": "Very good! You're on the right track!",
+          "keepGoing": "Keep going, you can do it!",
+          "getStarted": "Let's get started!"
+        }
+      },
+      "tips": {
+        "title": "Daily tip",
+        "content": "Focus on your most important tasks to maximize your daily impact."
+      },
+      "priority": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      }
+    },
+    "met": {
+      "title": "Things to avoid",
+      "subtitle": "For {{date}}",
+      "emptyTitle": "Nothing to avoid",
+      "emptySubtitle": "Define 1-3 things you absolutely want to avoid {{date}}",
+      "emptyExample": "Ex: social media, snacking, procrastination...",
+      "checkedLabel": "Failed - You did it",
+      "stats": {
+        "avoided": "{{percentage}}% avoided ({{avoided}}/{{total}})",
+        "encouragement": {
+          "perfect": "Perfect balance!",
+          "excellent": "Excellent control! Keep it up!",
+          "good": "Very good! Keep going!",
+          "warning": "Warning, stay vigilant",
+          "bad": "Need to get back on track!"
+        }
+      },
+      "tips": {
+        "title": "Tip",
+        "text": "Checking means you've succumbed to this temptation. The goal is to keep all boxes empty!"
+      }
+    },
+    "examples": {
+      "emails": "Reply to important emails",
+      "emailsDesc": "Handle urgent and important emails of the day",
+      "exercise": "30 min of exercise",
+      "exerciseDesc": "Cardio or strength training session",
+      "presentation": "Prepare client presentation",
+      "presentationDesc": "Finalize slides for tomorrow's presentation",
+      "meditation": "Morning meditation",
+      "meditationDesc": "Meditation session to start the day well"
+    }
+  },
+  "mitInput": {
+    "placeholder": "MIT {{number}}...",
+    "addButton": "Add MIT",
+    "counter": "{{count}} / {{total}} MIT created",
+    "categoryLabel": "Category:",
+    "validation": {
+      "alertTitle": "Warning",
+      "alertMessage": "Add at least one MIT to continue!"
+    },
+    "modal": {
+      "title": "Warning!",
+      "message": "You have more than 3 MITs. The goal is to do everything! \n\nAre you sure you can accomplish all this tomorrow?",
+      "revise": "Revise",
+      "confirm": "I confirm"
+    }
+  },
+  "metInput": {
+    "placeholder": "MET {{number}}...",
+    "addButton": "Add MET",
+    "counter": "{{count}} / {{total}} MET created",
+    "categoryLabel": "Category:",
+    "categories": {
+      "digital": "Digital",
+      "social": "Social",
+      "habits": "Habits",
+      "entertainment": "Entertainment",
+      "food": "Food",
+      "procrastination": "Procrastination"
+    },
+    "validation": {
+      "alertTitle": "Warning",
+      "alertMessage": "Add at least one MET to continue!"
+    },
+    "modal": {
+      "title": "Warning!",
+      "message": "You have more than 3 METs. The goal is to avoid everything! \n\nAre you sure you can avoid all this tomorrow?",
+      "revise": "Revise",
+      "confirm": "I confirm"
+    }
+  },
+  "mit": {
+    "title": "Most Important Tasks",
+    "subtitle": "Your priority tasks for today",
+    "empty": "No important tasks for today",
+    "completed": "Completed",
+    "pending": "Pending",
+    "add": "Add MIT",
+    "categories": {
+      "work": "Work",
+      "health": "Health", 
+      "personal": "Personal",
+      "learning": "Learning",
+      "relationships": "Relationships"
+    }
+  },
+  "met": {
+    "title": "Most Evitable Things", 
+    "subtitle": "Things to avoid today",
+    "empty": "Nothing to avoid today",
+    "avoided": "Avoided",
+    "failed": "Failed to avoid",
+    "add": "Add MET",
+    "categories": {
+      "procrastination": "Procrastination",
+      "distractions": "Distractions",
+      "bad_habits": "Bad Habits",
+      "negative_thoughts": "Negative Thoughts",
+      "time_wasters": "Time Wasters"
+    }
+  },
+  "modals": {
+    "taskModal": {
+      "mit": {
+        "newTitle": "New important task",
+        "editTitle": "Edit task",
+        "subtitle": "MIT for {{date}}",
+        "placeholder": "What do you absolutely need to accomplish?",
+        "emoji": "🎯"
+      },
+      "met": {
+        "newTitle": "New thing to avoid",
+        "editTitle": "Edit thing to avoid", 
+        "subtitle": "MET for {{date}}",
+        "placeholder": "What do you want to avoid doing?",
+        "emoji": "🚫"
+      },
+      "recurring": {
+        "mitLabel": "Daily task?",
+        "metLabel": "Daily restriction?",
+        "mitDescription": "Repeats every day",
+        "metDescription": "To avoid every day"
+      },
+      "ai": {
+        "buttonDefault": "Ask the AI assistant!",
+        "buttonUsed": "Another idea please!",
+        "buttonLoading": "AI is thinking...",
+        "buttonCooldown": "Wait {{seconds}}s...",
+        "contextLabel": "Give more context for a personalized idea:",
+        "contextPlaceholder": "Ex: something creative, marketing-related, quick to do...",
+        "contextPlaceholderMet": "Ex: work-related, food-related, digital distractions..."
+      },
+      "priority": {
+        "label": "Priority:",
+        "high": "High",
+        "medium": "Medium", 
+        "low": "Low"
+      },
+      "time": {
+        "label": "Estimated time:",
+        "options": {
+          "15min": "15min",
+          "30min": "30min", 
+          "1h": "1h",
+          "2h": "2h",
+          "3h+": "3h+"
+        }
+      },
+      "quickSuggestions": {
+        "title": "Popular suggestions:",
+        "socialMedia": "Social media",
+        "videoGames": "Video games",
+        "streaming": "TV/Streaming", 
+        "snacking": "Snacking"
+      },
+      "characterCount": "{{count}}/{{max}} characters",
+      "actions": {
+        "cancel": "Cancel",
+        "add": "Add",
+        "edit": "Edit"
+      }
+    }
+  },
+  "animations": {
+    "success": {
+      "mit": {
+        "message": "Great!",
+        "submessage": "Task completed"
+      },
+      "met": {
+        "message": "Well done!",
+        "submessage": "Temptation avoided"
+      }
+    },
+    "failure": {
+      "mit": {
+        "message": "Not yet...",
+        "submessage": "Task postponed"
+      },
+      "met": {
+        "message": "Oops...",
+        "submessage": "Better tomorrow"
+      }
+    }
+  },
+  "calendar": {
+    "locale": "en-US",
+    "views": {
+      "week": "Week",
+      "month": "Month"
+    },
+    "days": {
+      "short": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      }
+    }
+  },
+  "dates": {
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "yesterday": "yesterday",
+    "format": {
+      "weekdayDayMonth": "{weekday} {day} {month}"
+    }
+  },
+  "productivity": {
+    "enprod": "in productivity"
+  },
+  "future": {
+    "header": {
+      "defaultName": "Champion",
+      "greeting": "Hey {{firstName}}!"
+    },
+    "journal": {
+      "loading": "Loading your journal...",
+      "errors": {
+        "userNotFound": "User profile not found",
+        "loadingData": "Error loading data"
+      },
+      "error": {
+        "title": "Oops!",
+        "retry": "Try again"
+      },
+      "alerts": {
+        "error": "Error",
+        "futureAction": {
+          "title": "Action not possible",
+          "message": "You cannot mark a task in the future."
+        },
+        "uncheckMIT": {
+          "title": "Uncheck MIT",
+          "message": "Do you want to uncheck this MIT?",
+          "confirm": "Uncheck"
+        },
+        "uncheckMET": {
+          "title": "Uncheck MET",
+          "message": "Do you want to uncheck this MET?",
+          "confirm": "Uncheck"
+        },
+        "deleteMIT": {
+          "title": "Delete MIT",
+          "message": "Are you sure you want to delete this MIT?"
+        },
+        "deleteMET": {
+          "title": "Delete MET",
+          "message": "Are you sure you want to delete this MET?"
+        },
+        "mitUpdateError": "Unable to update MIT",
+        "metUpdateError": "Unable to update MET",
+        "mitCreateError": "Unable to create MIT",
+        "metCreateError": "Unable to create MET",
+        "mitDeleteError": "Unable to delete MIT",
+        "metDeleteError": "Unable to delete MET",
+        "achievementSaveError": "Unable to save achievement"
+      }
+    }
+  },
+  "present": {
+    "defaultName": "Champion",
+    "greeting": "Hey {{firstName}}!",
+    "subtitle": "What are we doing now?",
+    "progressBadge": "{{count}} in progress",
+    "sections": {
+      "current": "To do now",
+      "completed": "Ancient history"
+    },
+    "empty": {
+      "current": {
+        "title": "All tasks completed!",
+        "subtitle": "Congrats, you've accomplished everything today"
+      },
+      "completed": {
+        "title": "No completed tasks today",
+        "subtitle": "Complete your tasks to see them here"
+      }
+    },
+    "instructions": {
+      "title": "Tip",
+      "text": "Use the buttons to complete or resume your tasks"
+    },
+    "celebration": {
+      "title": "INCREDIBLE!",
+      "subtitle": "You've completed ALL your tasks!",
+      "description": "{{count}} task{{plural}} accomplished successfully",
+      "cta": "Prepare tomorrow",
+      "later": "Later"
+    }
+  },
+  "presentScreen": {
+    "header": {
+      "greeting": "Hey {{firstName}}!",
+      "subtitle": "What are we doing now?",
+      "inProgress": "{{count}} in progress"
+    },
+    "sections": {
+      "currentTasks": "To do now",
+      "completedTasks": "Ancient history"
+    },
+    "empty": {
+      "current": {
+        "title": "All tasks completed!",
+        "subtitle": "Congrats, you've accomplished everything today"
+      },
+      "completed": {
+        "title": "No completed tasks today",
+        "subtitle": "Complete your tasks to see them here"
+      }
+    },
+    "instructions": {
+      "title": "Tip",
+      "text": "Use the buttons to complete or resume your tasks"
+    },
+    "celebration": {
+      "title": "INCREDIBLE!",
+      "subtitle": "You've completed ALL your tasks!",
+      "description": "{{count}} task{{plural}} accomplished successfully",
+      "cta": "Prepare tomorrow",
+      "close": "Later"
+    }
+  },
+  "objectives": {
+    "loading": "Loading your objectives...",
+    "errors": {
+      "userNotFound": "User profile not found",
+      "loadingError": "Error loading objectives",
+      "createError": "Unable to create objective",
+      "updateError": "Unable to update progress",
+      "completeError": "Unable to complete objective",
+      "deleteError": "Unable to delete objective"
+    },
+    "delete": {
+      "title": "Delete objective",
+      "message": "Are you sure you want to delete \"{{title}}\"?"
+    },
+    "error": {
+      "title": "Oops!",
+      "retry": "Try again"
+    },
+    "confirmations": {
+      "created": "Objective created!"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "active": "Active",
+      "completed": "Done"
+    },
+    "header": {
+      "defaultName": "Champion",
+      "greeting": "Hey {{firstName}}!",
+      "subtitle": "Your personal objectives",
+      "progressLabel": "Objectives completion rate",
+      "completed": "{{completed}}/{{total}} completed",
+      "active": "{{count}} in progress",
+      "motivation": {
+        "exceptional": "Exceptional!",
+        "excellent": "Excellent work!",
+        "veryGood": "Very good!",
+        "good": "Good pace!",
+        "keepGoing": "Keep it up!",
+        "letsGo": "Let's go!"
+      }
+    },
+    "celebration": {
+      "messages": {
+        "health": {
+          "title": "Congrats {{firstName}}!",
+          "subtitle": "You've taken care of your health and your body thanks you!"
+        },
+        "learning": {
+          "title": "Congratulations {{firstName}}!",
+          "subtitle": "Your knowledge is expanding and your mind is flourishing!"
+        },
+        "professional": {
+          "title": "Excellent {{firstName}}!",
+          "subtitle": "Your career is taking off thanks to your efforts!"
+        },
+        "personal": {
+          "title": "Magnificent {{firstName}}!",
+          "subtitle": "You're becoming the best version of yourself!"
+        },
+        "default": {
+          "title": "Incredible {{firstName}}!",
+          "subtitle": "You've accomplished something wonderful!"
+        }
+      },
+      "stats": {
+        "achieved": "Achieved",
+        "day": "day",
+        "days": "days",
+        "category": "Category"
+      },
+      "motivation": "Every achieved objective brings you closer to your dreams. Keep believing in yourself!",
+      "buttons": {
+        "journal": "Note in my journal",
+        "close": "Close"
+      }
+    },
+    "categories": {
+      "all": "All",
+      "personal": "Personal",
+      "professional": "Professional",
+      "health": "Health",
+      "learning": "Learning"
+    },
+    "filter": {
+      "defaultLabel": "Filter",
+      "title": "Filter by category"
+    },
+    "summary": {
+      "title": "Progress summary",
+      "subtitle": "Your objectives overview",
+      "addButton": "Add",
+      "cards": {
+        "completion": {
+          "title": "Success rate",
+          "subtitle": "{{completed}} out of {{total}} objectives"
+        },
+        "active": {
+          "title": "Active objectives",
+          "subtitle": "In progress"
+        },
+        "urgent": {
+          "title": "Urgent objectives",
+          "subtitle": "Deadline < 30 days"
+        },
+        "average": {
+          "title": "Average progress",
+          "subtitle": "All objectives combined"
+        }
+      },
+      "priorityBreakdown": {
+        "title": "Priority breakdown",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      }
+    },
+    "addModal": {
+      "title": "New objective",
+      "titleField": {
+        "label": "Objective title",
+        "placeholder": "Describe your objective..."
+      },
+      "objectiveType": {
+        "title": "Objective type",
+        "simple": {
+          "label": "Simple objective",
+          "description": "To accomplish or not"
+        },
+        "target": {
+          "label": "Target objective",
+          "description": "With value to reach"
+        }
+      },
+      "targetSettings": {
+        "title": "Target settings",
+        "valuePlaceholder": "Ex: 10, 5000...",
+        "unitPlaceholder": "books, $, km...",
+        "progressType": {
+          "title": "Progress type",
+          "incremental": {
+            "label": "Step by step",
+            "description": "+1 each time"
+          },
+          "continuous": {
+            "label": "Fluid quantity",
+            "description": "+variable amount"
+          }
+        }
+      },
+      "category": {
+        "title": "Category"
+      },
+      "priority": {
+        "title": "Priority"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create objective"
+      }
+    },
+    "continuousProgress": {
+      "addButton": "Add",
+      "title": "Update progress",
+      "modes": {
+        "add": "Add",
+        "set": "Set"
+      },
+      "placeholders": {
+        "add": "Quantity to add",
+        "set": "New value"
+      },
+      "preview": {
+        "label": "New progress:"
+      },
+      "errors": {
+        "exceedsTargetAdd": "Added value exceeds target",
+        "exceedsTargetSet": "Value cannot exceed target"
+      },
+      "complete": {
+        "button": "Mark as completed",
+        "subtitle": "Set to {{target}} {{unit}}"
+      },
+      "suggestions": {
+        "title": "Quick suggestions:"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "list": {
+      "title": {
+        "all": "{{count}} objective(s) in progress",
+        "category": "{{count}} {{category}} objective(s)"
+      },
+      "priority": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "updateProgress": "Update",
+      "daysRemaining": "{{days}}d remaining",
+      "milestones": "Milestones",
+      "deleteConfirm": {
+        "title": "Delete objective",
+        "message": "Are you sure you want to delete \"{{title}}\"?",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      },
+      "empty": {
+        "title": "No active objectives",
+        "subtitleAll": "Create your first objective to start your journey",
+        "subtitleCategory": "No {{category}} objectives in progress"
+      }
+    },
+    "completed": {
+      "sectionTitle": "{{count}} completed objective(s)",
+      "completedOn": "Completed on {{date}}",
+      "empty": "No completed objectives yet",
+      "footer": "{{count}} objective(s) accomplished successfully!",
+      "deleteConfirm": {
+        "title": "Delete completed objective",
+        "message": "Are you sure you want to delete \"{{title}}\"?",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    }
+  },
+  "statistics": {
+    "loading": "Loading statistics...",
+    "retry": "Try again",
+    "errors": {
+      "loadingStats": "Error loading statistics",
+      "loadingCharts": "Error loading charts",
+      "loadingData": "Error loading data",
+      "general": "Error: {{message}}",
+      "chartsGeneral": "Charts error: {{message}}"
+    },
+    "header": {
+      "defaultName": "Champion",
+      "greeting": "Hey {{firstName}}!",
+      "subtitle": "Your statistics",
+      "success": "Success {{period}}",
+      "periods": {
+        "week": "this week",
+        "month": "this month",
+        "year": "this year"
+      }
+    },
+    "periods": {
+      "week": {
+        "label": "Week",
+        "shortLabel": "7D"
+      },
+      "month": {
+        "label": "Month",
+        "shortLabel": "30D"
+      },
+      "year": {
+        "label": "Year",
+        "shortLabel": "365D"
+      }
+    },
+    "charts": {
+      "title": "Evolution over time",
+      "retry": "Reload charts"
+    },
+    "days": {
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday"
+    },
+    "overview": {
+      "title": "Overview",
+      "subtitle": "Your performance at a glance",
+      "mit": {
+        "title": "MITs Completed",
+        "description": "Important tasks"
+      },
+      "met": {
+        "title": "METs Avoided",
+        "description": "Distractions avoided"
+      },
+      "streak": {
+        "title": "Current Streak",
+        "description": "Consecutive",
+        "day": "day",
+        "days": "days"
+      },
+      "productivity": {
+        "title": "Productivity Score",
+        "description": "Overall performance"
+      },
+      "achievements": {
+        "title": "Achievements",
+        "description": "Major accomplishments"
+      }
+    },
+    "periods": {
+      "title": "Analysis period",
+      "subtitle": "Choose the time range to analyze",
+      "week": {
+        "label": "Week",
+        "shortLabel": "7D"
+      },
+      "month": {
+        "label": "Month",
+        "shortLabel": "30D"
+      },
+      "year": {
+        "label": "Year",
+        "shortLabel": "365D"
+      }
+    },
+    "charts": {
+      "title": "Performance evolution",
+      "subtitle": "Progress charts over time",
+      "pieTitle": "Achievement breakdown",
+      "metrics": {
+        "completion": "Success rate",
+        "productivity": "Productivity score",
+        "consistency": "Consistency"
+      },
+      "periods": {
+        "week": "This week",
+        "month": "This month",
+        "year": "This year"
+      },
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "weeks": {
+        "w1": "W1",
+        "w2": "W2",
+        "w3": "W3",
+        "w4": "W4"
+      },
+      "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug"
+      },
+      "pie": {
+        "mitCompleted": "Completed",
+        "mitNotCompleted": "Not completed",
+        "metCompleted": "Avoided",
+        "metNotCompleted": "Not avoided",
+        "noData": "No data"
+      }
+    },
+    "analysis": {
+      "title": "Detailed analysis",
+      "subtitle": "Personalized insights and recommendations",
+      "periods": {
+        "week": "this week",
+        "month": "this month",
+        "year": "this year"
+      },
+      "metrics": {
+        "mitCompleted": "MITs Completed",
+        "metAvoided": "METs Avoided",
+        "averageTime": "Average time",
+        "bestDay": "Best day",
+        "successRate": "{{rate}}% success",
+        "avoidedRate": "{{rate}}% avoided",
+        "perSession": "per session"
+      },
+      "overallSuccessRate": "{{rate}}% overall success",
+      "performance": {
+        "exceptional": "Exceptional",
+        "excellent": "Excellent",
+        "veryGood": "Very good",
+        "good": "Good",
+        "average": "Average",
+        "needsImprovement": "Needs improvement"
+      },
+      "advice": {
+        "focusMIT": {
+          "title": "Focus on your MITs",
+          "description": "You avoid distractions well, but focus more on your important tasks."
+        },
+        "reduceDistractions": {
+          "title": "Reduce your distractions",
+          "description": "Excellent work on MITs! Now try to avoid more distractions."
+        },
+        "excellentPerformance": {
+          "title": "Excellent performance!",
+          "description": "Keep it up, you're on the right track to reach your goals."
+        },
+        "balanceMITMET": {
+          "title": "Balance MITs and METs",
+          "description": "Work on both your important tasks and avoiding distractions."
+        }
+      }
+    },
+    "streak": {
+      "title": "Success streaks",
+      "subtitle": "Your commitment and consistency",
+      "motivation": {
+        "newStart": {
+          "title": "New beginning!",
+          "message": "Every expert was once a beginner. Start your streak today!"
+        },
+        "firstStep": {
+          "title": "First step!",
+          "message": "Excellent! You've started your streak. Continue tomorrow!"
+        },
+        "weekProgress": {
+          "title": "{{days}} days in a row!",
+          "message": "You're on the right track! Keep going to reach a full week."
+        },
+        "impressive": {
+          "title": "{{days}} impressive days!",
+          "message": "Incredible consistency! You're developing a real habit."
+        },
+        "legendary": {
+          "title": "{{days}} legendary days!",
+          "message": "You're a machine! This discipline will transform your life."
+        }
+      },
+      "stats": {
+        "current": "Current streak",
+        "record": "Personal record",
+        "successful": "Successful days",
+        "successRate": "Success rate"
+      }
+    }
+  },
+  "settings": {
+    "loading": "Loading your settings...",
+    "defaultName": "Champion",
+    "errors": {
+      "userNotFound": "User profile not found",
+      "loadingError": "Error loading settings",
+      "saveError": "Unable to save setting"
+    },
+    "stats": {
+      "recently": "Recently",
+      "none": "None"
+    },
+    "error": {
+      "title": "Oops!",
+      "retry": "Try again"
+    },
+    "alerts": {
+      "editProfile": {
+        "title": "Edit Profile",
+        "message": "Feature coming soon!"
+      },
+      "privacy": {
+        "title": "Privacy Policy",
+        "message": "Feature coming soon!"
+      },
+      "terms": {
+        "title": "Terms of Service",
+        "message": "Feature coming soon!"
+      },
+      "exportData": {
+        "title": "Export Data",
+        "message": "Your data will be exported in JSON format."
+      },
+      "support": {
+        "title": "Contact Support",
+        "message": "To contact us, send an email to support@example.com"
+      },
+      "rateApp": {
+        "title": "Rate App",
+        "message": "Do you enjoy using this app?",
+        "later": "Later",
+        "rateNow": "Rate Now"
+      },
+      "resetApp": {
+        "title": "Reset Application",
+        "message": "Are you sure you want to erase everything? This action is irreversible.",
+        "cancel": "Cancel",
+        "reset": "Reset"
+      }
+    },
+    "language": {
+      "title": "Language",
+      "interface": {
+        "label": "Interface Language",
+        "description": "Change the app language"
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "push": {
+        "label": "Push notifications",
+        "description": "Receive reminders and alerts"
+      },
+      "dailyReminder": {
+        "label": "Daily reminder",
+        "description": "Notification at 9am to plan your day"
+      },
+      "weeklyReport": {
+        "label": "Weekly report",
+        "description": "Summary of your performance every Sunday"
+      }
+    },
+    "app": {
+      "title": "Application",
+      "darkMode": {
+        "label": "Dark mode",
+        "description": "Dark interface for your eyes"
+      },
+      "hapticFeedback": {
+        "label": "Vibrations",
+        "description": "Haptic feedback during interactions"
+      },
+      "autoBackup": {
+        "label": "Auto backup",
+        "description": "Cloud sync of your data"
+      }
+    },
+    "actions": {
+      "title": "Actions",
+      "exportData": {
+        "title": "Export my data",
+        "description": "Download all your information"
+      },
+      "contactSupport": {
+        "title": "Contact support",
+        "description": "Have a question? We're here to help"
+      },
+      "rateApp": {
+        "title": "Rate the app",
+        "description": "Help us improve Habitus"
+      }
+    },
+    "about": {
+      "title": "About",
+      "privacyPolicy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "version": "Habitus v1.0.0",
+      "madeWith": "Made with love for your productivity"
+    },
+    "dangerZone": {
+      "title": "Danger Zone",
+      "resetApp": {
+        "title": "Reset app",
+        "description": "Delete all data (irreversible)"
+      }
+    },
+    "profile": {
+      "level": "Level {{level}} • {{xp}} XP",
+      "memberSince": "Member since {{date}}"
+    }
+  },
+  "common": {
+    "error": "Error",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

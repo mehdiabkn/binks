@@ -1,0 +1,261 @@
+{
+  "onboarding": {
+    "questions": {
+      "1": {
+        "question": "What's your name?",
+        "subtitle": "Nice to meet you!",
+        "placeholder": "Your first name..."
+      },
+      "2": {
+        "question": "\"What gets measured gets improved.\"",
+        "subtitle": "Statistician W. Deming reminds us of the importance of measurement in performance improvement. \n\nHabitus allows you to measure your productivity and maintain daily motivation.",
+        "buttonText": "Continue"
+      },
+      "3": {
+        "question": "What kind of goals do you have {{firstName}}?",
+        "subtitle": "Select all that apply to you"
+      },
+      "4": {
+        "question": "For your goals, you consider yourself as:",
+        "subtitle": "{{firstName}}, be honest with yourself"
+      },
+      "5": {
+        "question": "What status would you like to achieve?",
+        "subtitle": "Your medium to long-term ambition"
+      },
+      "6": {
+        "question": "How much time do you give yourself?",
+        "subtitle": "To achieve this status"
+      },
+      "7": {
+        "question": "How far are you from the {{firstName}} who gives their maximum?",
+        "subtitle": "Because of your lack of goal tracking"
+      },
+      "8": {
+        "question": "You know {{firstName}}, it's not illegal to not achieve your goals",
+        "subtitle": "In fact, most people end up forgetting them and finding good excuses.",
+        "buttonText": "I am determined."
+      },
+      "9": {
+        "question": "What's your real reason?",
+        "subtitle": "Why do you want to achieve your goals? Be brutally honest {{firstName}}.",
+        "placeholder": "I want to succeed because..."
+      },
+      "10": {
+        "question": "Two concepts to know: \nMIT and MET",
+        "subtitle": "MIT (Most Important Things): The most important missions to accomplish\nMET (Most Evitable Things): What you must avoid doing at all costs",
+        "buttonText": "I understand"
+      },
+      "11": {
+        "question": "TEST: Write your MIT for tomorrow",
+        "subtitle": "3 to 5 things to do no matter what (stay realistic)",
+        "placeholder": "1. Finish the report\n2. Exercise for 30min\n3. ..."
+      },
+      "12": {
+        "question": "Write your MET for tomorrow",
+        "subtitle": "1 to 3 things you must avoid doing",
+        "placeholder": "1. Scrolling on social media\n2. Watching Netflix\n3. ..."
+      },
+      "13": {
+        "question": "Contract from present {{firstName}} to future {{firstName}}",
+        "subtitle": "I commit to respecting myself by giving myself the best gift: respecting my time on Earth by following my goals.",
+        "placeholder": "Sign your commitment here"
+      },
+      "14": {
+        "question": "Don't betray yourself {{firstName}}",
+        "subtitle": "1 free week, then the equivalent of half a Big Mac per month for your coaching."
+      }
+    },
+    "options": {
+      "scolaires": "Academic",
+      "sportifs": "Sports",
+      "business": "Business",
+      "personnels": "Personal",
+      "a_player": "A-Player",
+      "b_player": "B-Player",
+      "c_player": "C-Player",
+      "s_player": "S-Player",
+      "3mois": "3 months",
+      "6mois": "6 months",
+      "1an": "1 year",
+      "2ans": "2 years",
+      "pasloin": "Not very far",
+      "plutotloin": "Rather far",
+      "loin": "Far",
+      "abusivementloin": "Extremely far"
+    },
+    "maxLevel": {
+      "question": "Congratulations {{firstName}}!",
+      "subtitle": "You're already at maximum level. Let's continue...",
+      "buttonText": "Continue"
+    }
+  },
+  "welcome": {
+    "quote": {
+      "text": "\"What gets measured gets improved\"",
+      "author": "William E. Deming"
+    },
+    "cta": {
+      "title": "Your turn?",
+      "subtitle": "Let's start by understanding your problems and motivations with a few questions",
+      "button": "Start the quiz"
+    }
+  },
+  "offer": {
+    "greeting": "Okay, I've gotten to know you {{firstName}}.",
+    "insight": "I know what frustrates you and separates you from the best version of {{firstName}} that all your loved ones (and especially yourself) would dream of seeing exist one day.",
+    "proposition": {
+      "title": "Here's what I propose:"
+    },
+    "promises": {
+      "daily_accountability": "Every day I'll be there for you. I'll confront you with your commitments.",
+      "progress_tracking": "I'll meticulously record all your progress and victories.",
+      "evening_review": "Every evening we'll review your day together.",
+      "monthly_assessment": "Every month we'll celebrate everything you've managed to accomplish.",
+      "habit_formation": "I'll help you transform your good intentions into lasting habits.",
+      "motivation_boost": "I'll be your personal coach 24/7, always there to remotivate you."
+    },
+    "commitment": {
+      "title": "My commitment to you",
+      "message": "If you're ready to invest in building the best version of {{firstName}}, then let's start whenever you want!"
+    },
+    "guarantee": "7 days free trial - No commitment",
+    "cta": {
+      "primary": "Let's go!",
+      "secondary": "I'm ready to change",
+      "disclaimer": "Cancellation possible at any time • CONSIDERABLE ADDED VALUE GUARANTEED"
+    }
+  },
+  "signature": {
+    "instructions": {
+      "drawing": "✨ Draw your signature...",
+      "saved": "Signature saved!",
+      "default": "👆 Touch and drag to sign"
+    },
+    "clearButton": "🗑️ Clear",
+    "commitment": {
+      "title": "Congratulations",
+      "message": "I will congratulate you when you achieve your goals."
+    }
+  },
+  "paywall": {
+    "restore": {
+      "button": "Restore purchases",
+      "title": "Restore purchases", 
+      "noPurchases": "No purchases found to restore"
+    },
+    "loadingPlans": "Loading plans...",
+    "error": {
+      "title": "Error",
+      "loadingPackages": "Unable to load packages",
+      "purchase": "Purchase failed. Please try again.",
+      "restore": "Restore failed. Please try again."
+    },
+    "welcome": "Perfect {{firstName}}!",
+    "subtitle": "You're ready to transform your productivity. Discover everything Habitus can do for you.",
+    "benefits": {
+      "title": "With Habitus Premium, you get:",
+      "tracking": {
+        "icon": "📊",
+        "title": "Complete activity tracking",
+        "description": "Automatically track your time and habits"
+      },
+      "ai_coaching": {
+        "icon": "🤖",
+        "title": "Personalized AI coach",
+        "description": "Advice tailored to your daily performance"
+      },
+      "gamification": {
+        "icon": "🎮",
+        "title": "Advanced gamification",
+        "description": "Points system, achievements and motivating challenges"
+      },
+      "analytics": {
+        "icon": "📈",
+        "title": "Detailed analytics",
+        "description": "Complete statistics on your progress"
+      }
+    },
+    "choosePlan": "Choose your plan:",
+    "plans": {
+      "weekly": {
+        "duration": "Weekly"
+      },
+      "monthly": {
+        "duration": "Monthly"
+      },
+      "yearly": {
+        "duration": "Annual"
+      }
+    },
+    "prices": {
+      "weekly": {
+        "price": "$3.50",
+        "perDay": "$0.50/day"
+      },
+      "monthly": {
+        "price": "$7.99",
+        "originalPrice": "$14.00",
+        "perDay": "$0.26/day"
+      },
+      "yearly": {
+        "price": "$79.99",
+        "originalPrice": "$215.00",
+        "perDay": "$0.22/day"
+      }
+    },
+    "mostPopular": "MOST POPULAR",
+    "perDay": "{{price}}/day",
+    "startJourney": "Start my journey",
+    "noCommitment": "Cancel anytime",
+    "legal": "Secure payment • One-click cancellation • No commitment"
+  },
+  "welcomeToDashboard": {
+    "congrats": "You've taken the first step {{firstName}}!",
+    "subtitle": "You've just made the choice to regain control of your productivity. \nNow it's time to list your goals for tomorrow.",
+    "responsibility": {
+      "title": "🎯 Time for responsibility",
+      "message": "{{firstName}}, now that you've made this commitment, it's time to take action. Every day counts, every choice brings you closer to your goals."
+    },
+    "motivation": "Transform your routine into a success machine! You have all the tools to succeed.",
+    "startNow": "Let's go!",
+    "ready": "Ready to change your life, {{firstName}}?"
+  },
+  "testimonials": {
+    "laetitia": {
+      "name": "Laëtitia",
+      "role": "Software Engineer",
+      "quote": "I'm so proud of myself when I see all the accomplishments I check off every day!"
+    },
+    "lisa": {
+      "name": "Lisa",
+      "role": "Medical Student",
+      "quote": "Super useful, I separate work and rest time much better"
+    },
+    "sara": {
+      "name": "Sara",
+      "role": "Business School Student",
+      "quote": "So good to have this, work becomes like a game with lots of little missions every day"
+    },
+    "pierre": {
+      "name": "Pierre",
+      "role": "Engineering Student",
+      "quote": "With Habitus I never spend a moment without knowing what I have left to do and what I've done"
+    },
+    "lowenn": {
+      "name": "Lowenn",
+      "role": "Entrepreneur",
+      "quote": "When I write things in the app I have no choice but to follow through. Stressful but effective 😂"
+    }
+  },
+  "nameInput": {
+    "helpText": "✨ Your first name will allow us to personalize your experience"
+  },
+  "textInput": {
+    "helpTextWithName": "{{firstName}}, be specific to receive personalized advice",
+    "helpTextNoName": "Be specific to receive personalized advice"
+  },
+  "debug": {
+    "questionNumber": "Question {{current}}/{{total}} - Type: {{type}}"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "navigation": {
+    "backToWelcome": "Back",
+    "tabs": {
+      "journal": "Journal",
+      "statistics": "Statistics",
+      "objectives": "Goals", 
+      "settings": "Profile"
+    }
+  },
+  "tabs": {
+    "mit": {
+      "label": "MIT",
+      "description": "Most important tasks of the day"
+    },
+    "met": {
+      "label": "MET",
+      "description": "Things to absolutely avoid"
+    }
+  },
+  "common": {
+    "appName": "HABITUS",
+    "continue": "Continue",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish",
+    "cancel": "Cancel"
+  },
+  "progress": {
+    "step": "Step {{current}} of {{total}}",
+    "completed": "{{percentage}}% completed"
+  },
+  "multipleChoice": {
+    "selectionCount_one": "{{count}} selection",
+    "selectionCount_other": "{{count}} selections"
+  }
+}
