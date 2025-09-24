@@ -37,7 +37,8 @@ export default function TaskModal({
   const [hasUsedAI, setHasUsedAI] = useState(false);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
   const [aiContext, setAiContext] = useState('');
-  
+  const [selectedDays, setSelectedDays] = useState([]);
+
   // Animations pour les points de chargement
   const dot1Anim = useRef(new Animated.Value(0.4)).current;
   const dot2Anim = useRef(new Animated.Value(0.7)).current;
@@ -48,6 +49,49 @@ export default function TaskModal({
   
   // Animation pour la barre de cooldown
   const cooldownAnim = useRef(new Animated.Value(0)).current;
+
+  const getDaysOfWeek = () => {
+  return [
+    { key: 1, label: t('calendar.days.short.mon')[0].toUpperCase(), fullName: t('calendar.days.short.mon') },
+    { key: 2, label: t('calendar.days.short.tue')[0].toUpperCase(), fullName: t('calendar.days.short.tue') },
+    { key: 3, label: t('calendar.days.short.wed')[0].toUpperCase(), fullName: t('calendar.days.short.wed') },
+    { key: 4, label: t('calendar.days.short.thu')[0].toUpperCase(), fullName: t('calendar.days.short.thu') },
+    { key: 5, label: t('calendar.days.short.fri')[0].toUpperCase(), fullName: t('calendar.days.short.fri') },
+    { key: 6, label: t('calendar.days.short.sat')[0].toUpperCase(), fullName: t('calendar.days.short.sat') },
+    { key: 7, label: t('calendar.days.short.sun')[0].toUpperCase(), fullName: t('calendar.days.short.sun') },
+  ];
+};
+
+// Fonction pour toggler la sélection d'un jour
+const toggleDay = (dayKey) => {
+  setSelectedDays(prev => {
+    if (prev.includes(dayKey)) {
+      return prev.filter(d => d !== dayKey);
+    } else {
+      return [...prev, dayKey].sort();
+    }
+  });
+  triggerHapticFeedback();
+};
+// Fonction pour sélectionner rapidement des groupes de jours
+const selectDayGroup = (group) => {
+  triggerHapticFeedback('impactMedium');
+  switch (group) {
+    case 'weekdays':
+      setSelectedDays([1, 2, 3, 4, 5]);
+      break;
+    case 'weekend':
+      setSelectedDays([6, 7]);
+      break;
+    case 'everyday':
+      setSelectedDays([1, 2, 3, 4, 5, 6, 7]);
+      break;
+    case 'none':
+      setSelectedDays([]);
+      break;
+  }
+};
+
 
   const triggerHapticFeedback = (type = 'selection') => {
     const options = {
@@ -60,25 +104,26 @@ export default function TaskModal({
 
   // ✅ CORRIGÉ: Initialiser avec les données de la tâche à modifier
   useEffect(() => {
-    try {
-      if (editingTask) {
-        setTaskText(editingTask.text || '');
-        setPriority(editingTask.priority || 'medium');
-        setEstimatedTime(editingTask.estimatedTime || '30min');
-        setIsRecurring(Boolean(editingTask.isRecurring)); // ✅ FORCE la conversion en booléen
-        console.log('📝 TaskModal - Édition MIT avec isRecurring:', Boolean(editingTask.isRecurring));
-      } else {
-        setTaskText('');
-        setPriority('medium');
-        setEstimatedTime('30min');
-        setIsRecurring(false);
-        console.log('📝 TaskModal - Nouvelle MIT, isRecurring défaut:', false);
-      }
-    } catch (error) {
-      console.error('Erreur dans useEffect TaskModal:', error);
+  try {
+    if (editingTask) {
+      setTaskText(editingTask.text || '');
+      setPriority(editingTask.priority || 'medium');
+      setEstimatedTime(editingTask.estimatedTime || '30min');
+      setIsRecurring(Boolean(editingTask.isRecurring));
+      setSelectedDays(editingTask.selectedDays || []); // NOUVEAU
+      console.log('📝 TaskModal - Édition avec selectedDays:', editingTask.selectedDays);
+    } else {
+      setTaskText('');
+      setPriority('medium');
+      setEstimatedTime('30min');
+      setIsRecurring(false);
+      setSelectedDays([]); // NOUVEAU
+      console.log('📝 TaskModal - Nouvelle tâche, selectedDays:', []);
     }
-  }, [editingTask, visible]);
-
+  } catch (error) {
+    console.error('Erreur dans useEffect TaskModal:', error);
+  }
+}, [editingTask, visible]);
   // Animation shimmer continue
   useEffect(() => {
     const shimmerAnimation = Animated.loop(
@@ -102,41 +147,47 @@ export default function TaskModal({
 
   // ✅ CORRIGÉ: handleSave avec transmission EXPLICITE et logs détaillés
   const handleSave = () => {
-    if (!taskText || !taskText.trim()) return;
-    
-    triggerHapticFeedback('impactMedium');
-    
-    // ✅ TRANSMISSION EXPLICITE avec logs de debug
-    const taskData = {
-      text: taskText.trim(),
-      isRecurring: Boolean(isRecurring), // ✅ FORCE la conversion en booléen
-    };
-    
-    // Ajouter les propriétés spécifiques aux MIT
-    if (type === 'MIT') {
-      taskData.priority = priority;
-      taskData.estimatedTime = estimatedTime;
-    }
-    
-    console.log('📤 TaskModal - handleSave appelé avec:', {
-      taskText: taskText.trim(),
-      isRecurring: isRecurring,
-      isRecurringType: typeof isRecurring,
-      isRecurringBool: Boolean(isRecurring),
-      finalTaskData: taskData
-    });
-    
-    // ✅ Appel de onSave avec données vérifiées
-    if (onSave && typeof onSave === 'function') {
-      onSave(taskData);
-      console.log('✅ TaskModal - onSave appelé avec succès');
-    } else {
-      console.error('❌ TaskModal - onSave n\'est pas une fonction:', typeof onSave);
-    }
-    
-    resetForm();
-    handleClose();
+  if (!taskText || !taskText.trim()) return;
+  
+  // Validation : si récurrent, au moins un jour doit être sélectionné
+  if (isRecurring && selectedDays.length === 0) {
+    Alert.alert(
+      t('modals.taskModal.validation.noDaysTitle'),
+      t('modals.taskModal.validation.noDaysMessage'),
+      [{ text: t('common.ok') }]
+    );
+    return;
+  }
+  
+  triggerHapticFeedback('impactMedium');
+  
+  const taskData = {
+    text: taskText.trim(),
+    isRecurring: Boolean(isRecurring),
+    selectedDays: isRecurring ? selectedDays : [], // NOUVEAU
   };
+  
+  if (type === 'MIT') {
+    taskData.priority = priority;
+    taskData.estimatedTime = estimatedTime;
+  }
+  
+  console.log('📤 TaskModal - handleSave avec selectedDays:', {
+    taskText: taskText.trim(),
+    isRecurring: isRecurring,
+    selectedDays: selectedDays,
+    finalTaskData: taskData
+  });
+  
+  if (onSave && typeof onSave === 'function') {
+    onSave(taskData);
+    console.log('✅ TaskModal - onSave appelé avec succès');
+  }
+  
+  resetForm();
+  handleClose();
+};
+
 
   const handleAIGenerate = async () => {
     if (cooldownSeconds > 0) return;
@@ -232,18 +283,21 @@ export default function TaskModal({
   };
 
   // ✅ CORRIGÉ: Reset isRecurring dans resetForm
-  const resetForm = () => {
-    setTaskText('');
-    setPriority('medium');
-    setEstimatedTime('30min');
-    setIsRecurring(false); // ✅ Reset isRecurring
-    setIsGeneratingAI(false);
-    setHasUsedAI(false);
-    setCooldownSeconds(0);
-    setAiContext('');
-    cooldownAnim.setValue(0);
-    console.log('🔄 TaskModal - Formulaire réinitialisé, isRecurring:', false);
-  };
+  // ===== MODIFIER LE resetForm POUR INCLURE selectedDays =====
+    const resetForm = () => {
+      setTaskText('');
+      setPriority('medium');
+      setEstimatedTime('30min');
+      setIsRecurring(false);
+      setSelectedDays([]); // NOUVEAU
+      setIsGeneratingAI(false);
+      setHasUsedAI(false);
+      setCooldownSeconds(0);
+      setAiContext('');
+      cooldownAnim.setValue(0);
+      console.log('🔄 TaskModal - Formulaire réinitialisé avec selectedDays:', []);
+    };
+
 
   const handleCancel = () => {
     console.log('TaskModal - handleCancel appelé');
@@ -386,13 +440,18 @@ export default function TaskModal({
               })}
             </Text>
 
-            {/* ✅ NOUVEAU: Option récurrence simple et élégante (copié du METModal) */}
+            
+            {/* Option récurrence avec sélection des jours */}
+          <View style={styles.recurringSection}>
             <TouchableOpacity
               style={styles.recurringOption}
               onPress={() => {
                 triggerHapticFeedback();
                 const newValue = !isRecurring;
                 setIsRecurring(newValue);
+                if (!newValue) {
+                  setSelectedDays([]); // Reset les jours si on désactive la récurrence
+                }
                 console.log('📱 TaskModal - Toggle isRecurring:', isRecurring, '->', newValue);
               }}
             >
@@ -414,7 +473,7 @@ export default function TaskModal({
                 <View style={[
                   styles.checkbox,
                   isRecurring && styles.checkboxChecked,
-                  isRecurring && { backgroundColor: '#4CD964' } // Vert pour MIT
+                  isRecurring && { backgroundColor: type === 'MIT' ? '#4CD964' : '#FF6B6B' }
                 ]}>
                   {isRecurring && (
                     <Check size={16} color="#FFFFFF" strokeWidth={3} />
@@ -422,7 +481,81 @@ export default function TaskModal({
                 </View>
               </View>
             </TouchableOpacity>
-            
+
+            {/* Sélecteur de jours - visible seulement si récurrent */}
+            {isRecurring && (
+              <Animated.View 
+                style={[
+                  styles.daysSelector,
+                  { opacity: isRecurring ? 1 : 0 }
+                ]}
+              >
+                {/* Boutons de sélection rapide */}
+                <View style={styles.quickSelectContainer}>
+                  <Text style={styles.quickSelectLabel}>
+                    {t('modals.taskModal.days.quickSelect')}
+                  </Text>
+                  <View style={styles.quickSelectButtons}>
+                    <TouchableOpacity
+                      style={[styles.quickSelectButton, selectedDays.length === 5 && selectedDays.every(d => d <= 5) && styles.quickSelectButtonActive]}
+                      onPress={() => selectDayGroup('weekdays')}
+                    >
+                      <Text style={[styles.quickSelectButtonText, selectedDays.length === 5 && selectedDays.every(d => d <= 5) && styles.quickSelectButtonTextActive]}>
+                        {t('modals.taskModal.days.weekdays')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.quickSelectButton, selectedDays.length === 2 && selectedDays.includes(6) && selectedDays.includes(7) && styles.quickSelectButtonActive]}
+                      onPress={() => selectDayGroup('weekend')}
+                    >
+                      <Text style={[styles.quickSelectButtonText, selectedDays.length === 2 && selectedDays.includes(6) && selectedDays.includes(7) && styles.quickSelectButtonTextActive]}>
+                        {t('modals.taskModal.days.weekend')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.quickSelectButton, selectedDays.length === 7 && styles.quickSelectButtonActive]}
+                      onPress={() => selectDayGroup('everyday')}
+                    >
+                      <Text style={[styles.quickSelectButtonText, selectedDays.length === 7 && styles.quickSelectButtonTextActive]}>
+                        {t('modals.taskModal.days.everyday')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Cases à cocher des jours individuels */}
+                <View style={styles.daysGrid}>
+                  <Text style={styles.daysGridLabel}>
+                    {t('modals.taskModal.days.selectDays')}
+                  </Text>
+                  <View style={styles.daysButtons}>
+                    {getDaysOfWeek().map((day) => (
+                      <TouchableOpacity
+                        key={day.key}
+                        style={[
+                          styles.dayButton,
+                          selectedDays.includes(day.key) && [
+                            styles.dayButtonSelected,
+                            { backgroundColor: type === 'MIT' ? '#4CD964' : '#FF6B6B' }
+                          ]
+                        ]}
+                        onPress={() => toggleDay(day.key)}
+                      >
+                        <Text style={[
+                          styles.dayButtonText,
+                          selectedDays.includes(day.key) && styles.dayButtonTextSelected
+                        ]}>
+                          {day.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                  
+              
+            </View>
+                </Animated.View>
+            )}
+          </View>
             {/* Bouton IA - Affichage forcé pour test */}
             {type === 'MIT' && !editingTask && (
               <TouchableOpacity
@@ -975,4 +1108,131 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
   },
+  recurringSection: {
+  marginBottom: 20,
+},
+
+// Styles existants recurringOption (gardés identiques)
+recurringOption: {
+  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  borderRadius: 12,
+  padding: 16,
+  marginBottom: 16,
+  borderWidth: 1,
+  borderColor: 'rgba(255, 255, 255, 0.1)',
+},
+
+// Nouveau : Sélecteur de jours
+daysSelector: {
+  backgroundColor: 'rgba(255, 255, 255, 0.03)',
+  borderRadius: 16,
+  padding: 20,
+  borderWidth: 1,
+  borderColor: 'rgba(255, 255, 255, 0.08)',
+},
+
+// Section sélection rapide
+quickSelectContainer: {
+  marginBottom: 20,
+},
+quickSelectLabel: {
+  fontFamily: 'Poppins-Medium',
+  fontSize: 14,
+  color: 'rgba(255, 255, 255, 0.8)',
+  marginBottom: 12,
+},
+quickSelectButtons: {
+  flexDirection: 'row',
+  gap: 8,
+  flexWrap: 'wrap',
+},
+quickSelectButton: {
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+  borderRadius: 20,
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  borderWidth: 1,
+  borderColor: 'rgba(255, 255, 255, 0.2)',
+},
+quickSelectButtonActive: {
+  backgroundColor: 'rgba(99, 102, 241, 0.3)',
+  borderColor: 'rgba(99, 102, 241, 0.5)',
+},
+quickSelectButtonText: {
+  fontFamily: 'Poppins-Medium',
+  fontSize: 12,
+  color: 'rgba(255, 255, 255, 0.7)',
+},
+quickSelectButtonTextActive: {
+  color: '#FFFFFF',
+  fontFamily: 'Poppins-Bold',
+},
+
+// Grille des jours
+daysGrid: {
+  marginBottom: 16,
+},
+daysGridLabel: {
+  fontFamily: 'Poppins-Medium',
+  fontSize: 14,
+  color: 'rgba(255, 255, 255, 0.8)',
+  marginBottom: 12,
+},
+daysButtons: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  gap: 6,
+  marginBottom: 16,
+},
+dayButton: {
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  borderWidth: 2,
+  borderColor: 'rgba(255, 255, 255, 0.3)',
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 2,
+},
+dayButtonSelected: {
+  borderColor: 'transparent',
+  shadowColor: 'rgba(99, 102, 241, 0.5)',
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.6,
+  shadowRadius: 8,
+  elevation: 6,
+  transform: [{ scale: 1.05 }],
+},
+dayButtonText: {
+  fontFamily: 'Poppins-Bold',
+  fontSize: 16,
+  color: 'rgba(255, 255, 255, 0.6)',
+},
+dayButtonTextSelected: {
+  color: '#FFFFFF',
+  textShadowColor: 'rgba(0, 0, 0, 0.5)',
+  textShadowOffset: { width: 0, height: 1 },
+  textShadowRadius: 2,
+},
+
+// Résumé de la sélection
+selectionSummary: {
+  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+  borderRadius: 12,
+  padding: 12,
+  borderWidth: 1,
+  borderColor: 'rgba(99, 102, 241, 0.2)',
+},
+selectionSummaryText: {
+  fontFamily: 'Poppins-Regular',
+  fontSize: 13,
+  color: 'rgba(99, 102, 241, 0.9)',
+  textAlign: 'center',
+  lineHeight: 18,
+},
 });

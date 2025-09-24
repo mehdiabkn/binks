@@ -61,22 +61,28 @@ export default function MITTab({
     setIsModalVisible(true);
   };
 
-  const handleSaveTask = (taskData) => {
-    console.log('MITTab - Données reçues:', taskData);
-    
-    if (editingTask) {
-      console.log('Édition de tâche:', taskData);
-    } else {
-      onAdd(
-        taskData.text, 
-        taskData.priority, 
-        taskData.estimatedTime, 
-        taskData.isRecurring
-      );
-    }
-    setIsModalVisible(false);
-    setEditingTask(null);
-  };
+
+// CORRECTIONS DANS ./components/Future/MITTab.js ET METTab.js
+
+// ✅ DANS MITTab.js - CORRIGER handleSaveTask (ligne ~55)
+const handleSaveTask = (taskData) => {
+  console.log('MITTab - Données reçues:', taskData);
+  
+  if (editingTask) {
+    console.log('Édition de tâche:', taskData);
+  } else {
+    // ✅ PASSER TOUTES LES DONNÉES incluant selectedDays
+    onAdd(
+      taskData.text, 
+      taskData.priority, 
+      taskData.estimatedTime, 
+      taskData.isRecurring,
+      taskData.selectedDays // ✅ AJOUT
+    );
+  }
+  setIsModalVisible(false);
+  setEditingTask(null);
+};
 
   const handleCloseModal = () => {
     setIsModalVisible(false);

@@ -41,6 +41,554 @@ export class TaskService {
     }
   }
 
+
+  // NOUVELLES MÉTHODES À AJOUTER DANS ./services/taskService.js
+
+// ================================
+// GESTION DES TEMPLATES RÉCURRENTS
+// ================================
+
+/**
+ * Créer un template récurrent (remplace createMIT/createMET pour les tâches récurrentes)
+ */
+// MODIFICATION DANS ./services/taskService.js
+
+/**
+ * Créer un template récurrent avec génération immédiate si applicable
+ */
+static async createRecurringTemplate(userId, templateData) {
+  try {
+    console.log('🔄 Création template récurrent...', { userId, templateData });
+
+    // Validation des données (gardée identique)
+    if (!templateData.text?.trim()) {
+      throw new Error('Le texte de la tâche est requis');
+    }
+
+    if (!templateData.type || !['MIT', 'MET'].includes(templateData.type)) {
+      throw new Error('Le type doit être MIT ou MET');
+    }
+
+    if (!templateData.selectedDays || templateData.selectedDays.length === 0) {
+      throw new Error('Au moins un jour doit être sélectionné');
+    }
+
+    const newTemplate = {
+      user_id: userId,
+      type: templateData.type,
+      text: templateData.text.trim(),
+      days_of_week: templateData.selectedDays, // Array [1,2,3,4,5]
+      is_active: true
+    };
+
+    // Ajouter les champs spécifiques aux MIT
+    if (templateData.type === 'MIT') {
+      newTemplate.priority = templateData.priority || 'medium';
+      newTemplate.estimated_time = templateData.estimatedTime || '30min';
+    }
+
+    console.log('📝 Données template à insérer:', newTemplate);
+
+    // 1. Créer le template
+    const { data, error } = await supabase
+      .from('recurring_templates')
+      .insert([newTemplate])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('❌ Erreur Supabase createRecurringTemplate:', error);
+      throw error;
+    }
+
+    console.log('✅ Template récurrent créé:', data);
+
+    // 2. ✅ NOUVEAU: Vérifier si on doit générer la tâche aujourd'hui
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const normalizedDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek; // Dimanche = 7
+    const todayDateStr = today.toISOString().split('T')[0];
+
+    console.log('🗓️ Vérification génération immédiate:', {
+      today: todayDateStr,
+      dayOfWeek: normalizedDayOfWeek,
+      selectedDays: templateData.selectedDays,
+      shouldGenerate: templateData.selectedDays.includes(normalizedDayOfWeek)
+    });
+
+    let generatedTask = null;
+
+    // Si aujourd'hui fait partie des jours sélectionnés, générer la tâche
+    if (templateData.selectedDays.includes(normalizedDayOfWeek)) {
+      console.log('⚡ Génération immédiate de la tâche pour aujourd\'hui...');
+
+      try {
+        if (templateData.type === 'MIT') {
+          // Vérifier qu'une MIT n'existe pas déjà pour aujourd'hui
+          const { data: existingMIT } = await supabase
+            .from('mits')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('text', templateData.text)
+            .eq('start_date', todayDateStr)
+            .single();
+
+          if (!existingMIT) {
+            const { data: newMIT, error: mitError } = await supabase
+              .from('mits')
+              .insert([{
+                user_id: userId,
+                text: templateData.text,
+                priority: templateData.priority,
+                estimated_time: templateData.estimatedTime,
+                is_recurring: false, // Tâche générée, pas récurrente
+                start_date: todayDateStr,
+                end_date: todayDateStr,
+                is_active: true
+              }])
+              .select()
+              .single();
+
+            if (!mitError) {
+              generatedTask = newMIT;
+              console.log('✅ MIT générée immédiatement:', newMIT.text);
+            } else {
+              console.error('❌ Erreur génération MIT immédiate:', mitError);
+            }
+          } else {
+            console.log('⚠️ MIT existe déjà pour aujourd\'hui');
+          }
+
+        } else if (templateData.type === 'MET') {
+          // Vérifier qu'une MET n'existe pas déjà pour aujourd'hui
+          const { data: existingMET } = await supabase
+            .from('mets')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('text', templateData.text)
+            .eq('start_date', todayDateStr)
+            .single();
+
+          if (!existingMET) {
+            const { data: newMET, error: metError } = await supabase
+              .from('mets')
+              .insert([{
+                user_id: userId,
+                text: templateData.text,
+                is_recurring: false, // Tâche générée, pas récurrente
+                start_date: todayDateStr,
+                end_date: todayDateStr,
+                is_active: true
+              }])
+              .select()
+              .single();
+
+            if (!metError) {
+              generatedTask = newMET;
+              console.log('✅ MET générée immédiatement:', newMET.text);
+            } else {
+              console.error('❌ Erreur génération MET immédiate:', metError);
+            }
+          } else {
+            console.log('⚠️ MET existe déjà pour aujourd\'hui');
+          }
+        }
+
+      } catch (generationError) {
+        console.error('❌ Erreur lors de la génération immédiate:', generationError);
+        // Ne pas faire échouer la création du template pour autant
+      }
+    }
+
+    // 3. Retourner le résultat avec template ET tâche générée si applicable
+    return {
+      success: true,
+      template: data,
+      generatedTask: generatedTask, // ✅ NOUVEAU: Inclure la tâche générée
+      wasGeneratedToday: !!generatedTask
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur création template récurrent:', error);
+    return {
+      success: false,
+      error: error.message,
+      template: null,
+      generatedTask: null,
+      wasGeneratedToday: false
+    };
+  }
+}
+
+/**
+ * Récupérer tous les templates récurrents actifs d'un utilisateur
+ */
+static async getActiveRecurringTemplates(userId) {
+  try {
+    console.log('🔄 Récupération templates récurrents...', { userId });
+
+    const { data, error } = await supabase
+      .from('recurring_templates')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(`✅ ${data?.length || 0} templates récurrents trouvés`);
+    
+    return {
+      success: true,
+      templates: data || []
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur récupération templates récurrents:', error);
+    return {
+      success: false,
+      error: error.message,
+      templates: []
+    };
+  }
+}
+
+/**
+ * Désactiver un template récurrent (au lieu de le supprimer)
+ */
+static async deactivateRecurringTemplate(templateId) {
+  try {
+    console.log('🔄 Désactivation template récurrent...', { templateId });
+
+    const { data, error } = await supabase
+      .from('recurring_templates')
+      .update({ 
+        is_active: false,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', templateId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ Template récurrent désactivé:', data);
+    return {
+      success: true,
+      template: data
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur désactivation template récurrent:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+/**
+ * Générer les tâches quotidiennes depuis les templates (pour GitHub Action)
+ */
+static async generateDailyTasksFromTemplates(targetDate) {
+  try {
+    console.log('🤖 Génération tâches quotidiennes...', { targetDate });
+
+    // Obtenir le jour de la semaine (1=Lundi, 7=Dimanche)
+    const date = new Date(targetDate);
+    const dayOfWeek = date.getDay();
+    const normalizedDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek; // Dimanche = 7
+
+    console.log(`📅 Date: ${targetDate}, Jour de semaine: ${normalizedDayOfWeek}`);
+
+    // Récupérer tous les templates actifs qui correspondent à ce jour
+    const { data: templates, error } = await supabase
+      .from('recurring_templates')
+      .select('*')
+      .eq('is_active', true)
+      .contains('days_of_week', [normalizedDayOfWeek]);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(`🔄 ${templates?.length || 0} templates trouvés pour ce jour`);
+
+    if (!templates || templates.length === 0) {
+      return {
+        success: true,
+        generated: {
+          mits: [],
+          mets: []
+        }
+      };
+    }
+
+    const generatedMITs = [];
+    const generatedMETs = [];
+
+    // Générer les tâches pour chaque template
+    for (const template of templates) {
+      try {
+        if (template.type === 'MIT') {
+          // Vérifier si une MIT existe déjà pour cette date
+          const { data: existingMIT } = await supabase
+            .from('mits')
+            .select('id')
+            .eq('user_id', template.user_id)
+            .eq('text', template.text)
+            .eq('start_date', targetDate)
+            .single();
+
+          if (!existingMIT) {
+            const { data: newMIT, error: mitError } = await supabase
+              .from('mits')
+              .insert([{
+                user_id: template.user_id,
+                text: template.text,
+                priority: template.priority,
+                estimated_time: template.estimated_time,
+                is_recurring: false, // Les tâches générées ne sont PAS récurrentes
+                start_date: targetDate,
+                end_date: targetDate, // Tâche pour ce jour seulement
+                is_active: true
+              }])
+              .select()
+              .single();
+
+            if (!mitError) {
+              generatedMITs.push(newMIT);
+              console.log(`✅ MIT générée: ${template.text}`);
+            }
+          }
+
+        } else if (template.type === 'MET') {
+          // Vérifier si une MET existe déjà pour cette date
+          const { data: existingMET } = await supabase
+            .from('mets')
+            .select('id')
+            .eq('user_id', template.user_id)
+            .eq('text', template.text)
+            .eq('start_date', targetDate)
+            .single();
+
+          if (!existingMET) {
+            const { data: newMET, error: metError } = await supabase
+              .from('mets')
+              .insert([{
+                user_id: template.user_id,
+                text: template.text,
+                is_recurring: false, // Les tâches générées ne sont PAS récurrentes
+                start_date: targetDate,
+                end_date: targetDate, // Tâche pour ce jour seulement
+                is_active: true
+              }])
+              .select()
+              .single();
+
+            if (!metError) {
+              generatedMETs.push(newMET);
+              console.log(`✅ MET générée: ${template.text}`);
+            }
+          }
+        }
+
+      } catch (templateError) {
+        console.error(`❌ Erreur génération template ${template.id}:`, templateError);
+      }
+    }
+
+    console.log(`🎯 Génération terminée: ${generatedMITs.length} MIT, ${generatedMETs.length} MET`);
+
+    return {
+      success: true,
+      generated: {
+        mits: generatedMITs,
+        mets: generatedMETs
+      }
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur génération tâches quotidiennes:', error);
+    return {
+      success: false,
+      error: error.message,
+      generated: {
+        mits: [],
+        mets: []
+      }
+    };
+  }
+}
+
+/**
+ * Récupérer les statistiques des templates récurrents
+ */
+static async getRecurringTemplateStats(userId) {
+  try {
+    console.log('📊 Récupération stats templates récurrents...', { userId });
+
+    const { data: templates, error } = await supabase
+      .from('recurring_templates')
+      .select('type, days_of_week')
+      .eq('user_id', userId)
+      .eq('is_active', true);
+
+    if (error) {
+      throw error;
+    }
+
+    const stats = {
+      totalTemplates: templates?.length || 0,
+      mitTemplates: templates?.filter(t => t.type === 'MIT').length || 0,
+      metTemplates: templates?.filter(t => t.type === 'MET').length || 0,
+      dailyTemplates: templates?.filter(t => t.days_of_week?.length === 7).length || 0,
+      weekdayTemplates: templates?.filter(t => 
+        t.days_of_week?.length === 5 && 
+        t.days_of_week?.every(day => day >= 1 && day <= 5)
+      ).length || 0,
+      weekendTemplates: templates?.filter(t => 
+        t.days_of_week?.length === 2 && 
+        t.days_of_week?.includes(6) && 
+        t.days_of_week?.includes(7)
+      ).length || 0
+    };
+
+    console.log('✅ Stats templates calculées:', stats);
+    return {
+      success: true,
+      stats
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur stats templates récurrents:', error);
+    return {
+      success: false,
+      error: error.message,
+      stats: null
+    };
+  }
+}
+
+// ================================
+// MÉTHODES MODIFIÉES POUR COMPATIBILITÉ
+// ================================
+
+/**
+ * NOUVEAU: Créer une MIT - distingue entre ponctuelle et récurrente
+ */
+static async createMIT(userId, mitData) {
+  try {
+    console.log('⚡ Création MIT...', { userId, mitData });
+
+    // Si c'est récurrent, créer un template au lieu d'une tâche
+    if (mitData.isRecurring && mitData.selectedDays?.length > 0) {
+      console.log('🔄 MIT récurrente détectée, création template...');
+      
+      return await this.createRecurringTemplate(userId, {
+        ...mitData,
+        type: 'MIT'
+      });
+    }
+
+    // Sinon, créer une MIT ponctuelle traditionnelle
+    console.log('📅 MIT ponctuelle, création normale...');
+    
+    const newMIT = {
+      user_id: userId,
+      text: mitData.text,
+      priority: mitData.priority || 'medium',
+      estimated_time: mitData.estimatedTime || null,
+      is_recurring: false, // Toujours false maintenant
+      start_date: mitData.startDate || new Date().toISOString().split('T')[0],
+      end_date: mitData.endDate || null,
+      is_active: true
+    };
+
+    const { data, error } = await supabase
+      .from('mits')
+      .insert([newMIT])
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ MIT ponctuelle créée:', data);
+    return {
+      success: true,
+      mit: data
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur création MIT:', error);
+    return {
+      success: false,
+      error: error.message,
+      mit: null
+    };
+  }
+}
+
+/**
+ * NOUVEAU: Créer une MET - distingue entre ponctuelle et récurrente
+ */
+static async createMET(userId, metData) {
+  try {
+    console.log('🚫 Création MET...', { userId, metData });
+
+    // Si c'est récurrent, créer un template au lieu d'une tâche
+    if (metData.isRecurring && metData.selectedDays?.length > 0) {
+      console.log('🔄 MET récurrente détectée, création template...');
+      
+      return await this.createRecurringTemplate(userId, {
+        ...metData,
+        type: 'MET'
+      });
+    }
+
+    // Sinon, créer une MET ponctuelle traditionnelle
+    console.log('📅 MET ponctuelle, création normale...');
+    
+    const newMET = {
+      user_id: userId,
+      text: metData.text,
+      is_recurring: false, // Toujours false maintenant
+      start_date: metData.startDate || new Date().toISOString().split('T')[0],
+      end_date: metData.endDate || null,
+      is_active: true
+    };
+
+    const { data, error } = await supabase
+      .from('mets')
+      .insert([newMET])
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('✅ MET ponctuelle créée:', data);
+    return {
+      success: true,
+      met: data
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur création MET:', error);
+    return {
+      success: false,
+      error: error.message,
+      met: null
+    };
+  }
+}
   // ✅ Récupérer les tâches terminées
   static async getCompletedTasks(userId, limit = 10) {
     try {
@@ -276,51 +824,7 @@ export class TaskService {
     }
   }
 
-  // ✅ CORRIGÉ: Créer une nouvelle MIT avec gestion is_recurring
-  static async createMIT(userId, mitData) {
-    try {
-      console.log('⚡ Création nouvelle MIT...', { userId, mitData });
-      console.log('🔧 isRecurring reçu:', mitData.isRecurring, typeof mitData.isRecurring);
 
-      const newMIT = {
-        user_id: userId,
-        text: mitData.text,
-        priority: mitData.priority || 'medium',
-        estimated_time: mitData.estimatedTime || null,
-        is_recurring: Boolean(mitData.isRecurring), // ✅ NOUVEAU: Conversion explicite en booléen
-        start_date: mitData.startDate || new Date().toISOString().split('T')[0],
-        end_date: mitData.endDate || null,
-        is_active: true
-      };
-
-      console.log('📝 Données MIT à insérer:', newMIT);
-
-      const { data, error } = await supabase
-        .from('mits')
-        .insert([newMIT])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('❌ Erreur Supabase createMIT:', error);
-        throw error;
-      }
-
-      console.log('✅ MIT créée avec is_recurring:', data.is_recurring);
-      return {
-        success: true,
-        mit: data
-      };
-
-    } catch (error) {
-      console.error('❌ Erreur création MIT:', error);
-      return {
-        success: false,
-        error: error.message,
-        mit: null
-      };
-    }
-  }
 
   // ✅ ANCIEN: Marquer une MIT comme terminée pour aujourd'hui (conservé pour compatibilité)
   static async completeMITToday(userId, mitId) {
@@ -488,49 +992,7 @@ export class TaskService {
     }
   }
 
-  // ✅ CORRIGÉ: Créer une nouvelle MET avec gestion is_recurring
-  static async createMET(userId, metData) {
-    try {
-      console.log('🚫 Création nouvelle MET...', { userId, metData });
-      console.log('🔧 isRecurring reçu:', metData.isRecurring, typeof metData.isRecurring);
 
-      const newMET = {
-        user_id: userId,
-        text: metData.text,
-        is_recurring: Boolean(metData.isRecurring), // ✅ NOUVEAU: Conversion explicite en booléen
-        start_date: metData.startDate || new Date().toISOString().split('T')[0],
-        end_date: metData.endDate || null,
-        is_active: true
-      };
-
-      console.log('📝 Données MET à insérer:', newMET);
-
-      const { data, error } = await supabase
-        .from('mets')
-        .insert([newMET])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('❌ Erreur Supabase createMET:', error);
-        throw error;
-      }
-
-      console.log('✅ MET créée avec is_recurring:', data.is_recurring);
-      return {
-        success: true,
-        met: data
-      };
-
-    } catch (error) {
-      console.error('❌ Erreur création MET:', error);
-      return {
-        success: false,
-        error: error.message,
-        met: null
-      };
-    }
-  }
 
   // ✅ ANCIEN: Marquer une MET comme "faite" pour aujourd'hui (conservé pour compatibilité)
   static async checkMETToday(userId, metId) {
@@ -740,54 +1202,7 @@ export class TaskService {
     }
   }
 
-  // ✅ NOUVEAU: Récupérer les MIT/MET récurrentes pour mise à jour automatique
-  static async getRecurringTasks(userId) {
-    try {
-      console.log('🔄 Récupération tâches récurrentes...', { userId });
 
-      const [mitsResult, metsResult] = await Promise.all([
-        supabase
-          .from('mits')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('is_active', true)
-          .eq('is_recurring', true),
-        
-        supabase
-          .from('mets')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('is_active', true)
-          .eq('is_recurring', true)
-      ]);
-
-      if (mitsResult.error) throw mitsResult.error;
-      if (metsResult.error) throw metsResult.error;
-
-      const recurringTasks = {
-        mits: mitsResult.data || [],
-        mets: metsResult.data || []
-      };
-
-      console.log('✅ Tâches récurrentes trouvées:', {
-        mits: recurringTasks.mits.length,
-        mets: recurringTasks.mets.length
-      });
-
-      return {
-        success: true,
-        recurringTasks
-      };
-
-    } catch (error) {
-      console.error('❌ Erreur récupération tâches récurrentes:', error);
-      return {
-        success: false,
-        error: error.message,
-        recurringTasks: { mits: [], mets: [] }
-      };
-    }
-  }
 
   // ✅ NOUVEAU: Récupérer les completions/checks pour une date spécifique
   static async getTaskDataForDate(userId, targetDate) {

@@ -482,40 +482,98 @@ export default function JournalScreen({ userProfile }) {
     }
   };
 
-  // ✅ CORRIGÉ: Ajouter une nouvelle MIT avec gestion d'is_recurring
-  const handleMITAdd = async (text, priority = 'medium', estimatedTime = '30min', isRecurring = false) => {
-    if (!userProfile?.supabaseId || !text.trim()) return;
+  // CORRECTIONS DANS ./screens/JournalScreen.js
 
-    try {
-      console.log('Création MIT avec données:', {
-        text: text.trim(),
-        priority,
-        estimatedTime,
-        isRecurring,
-      });
+// ✅ CORRIGER handleMITAdd - ligne ~275
+const handleMITAdd = async (text, priority = 'medium', estimatedTime = '30min', isRecurring = false, selectedDays = []) => {
+  if (!userProfile?.supabaseId || !text.trim()) return;
 
-      const mitData = {
-        text: text.trim(),
-        priority,
-        estimatedTime,
-        isRecurring: isRecurring,
-        startDate: getDateKey(selectedDate) // ✅ Utiliser la date sélectionnée comme date de début
-      };
+  try {
+    console.log('Création MIT avec données complètes:', {
+      text: text.trim(),
+      priority,
+      estimatedTime,
+      isRecurring,
+      selectedDays,
+    });
 
-      const result = await TaskService.createMIT(userProfile.supabaseId, mitData);
-      
-      if (result.success) {
+    const mitData = {
+      text: text.trim(),
+      priority,
+      estimatedTime,
+      isRecurring: isRecurring,
+      selectedDays: selectedDays,
+      startDate: getDateKey(selectedDate)
+    };
+
+    const result = await TaskService.createMIT(userProfile.supabaseId, mitData);
+    
+    if (result.success) {
+      // Si c'est une tâche ponctuelle OU un template qui a généré une tâche aujourd'hui
+      if (!isRecurring || selectedDays.length === 0) {
+        // Tâche ponctuelle - ajouter aux MIT locales
         setActiveMITs(prev => [...prev, result.mit]);
-        console.log('Nouvelle MIT créée avec is_recurring:', result.mit.is_recurring);
+        console.log('MIT ponctuelle ajoutée aux MIT locales');
+      } else if (result.wasGeneratedToday && result.generatedTask) {
+        // Template récurrent avec génération immédiate - ajouter la tâche générée
+        setActiveMITs(prev => [...prev, result.generatedTask]);
+        console.log('Template créé ET tâche générée immédiatement ajoutée aux MIT locales');
       } else {
-        Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.mitCreateError'));
+        // Template récurrent sans génération aujourd'hui
+        console.log('Template MIT créé, pas de génération pour aujourd\'hui');
       }
-    } catch (error) {
-      console.error('Erreur création MIT:', error);
+    } else {
       Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.mitCreateError'));
     }
-  };
+  } catch (error) {
+    console.error('Erreur création MIT:', error);
+    Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.mitCreateError'));
+  }
+};
 
+
+// ✅ MODIFICATION du handleMETAdd pour traiter la génération immédiate
+const handleMETAdd = async (text, isRecurring = true, selectedDays = []) => {
+  if (!userProfile?.supabaseId || !text.trim()) return;
+
+  try {
+    console.log('Création MET avec données complètes:', {
+      text: text.trim(),
+      isRecurring,
+      selectedDays,
+    });
+
+    const metData = {
+      text: text.trim(),
+      isRecurring: isRecurring,
+      selectedDays: selectedDays,
+      startDate: getDateKey(selectedDate)
+    };
+
+    const result = await TaskService.createMET(userProfile.supabaseId, metData);
+    
+    if (result.success) {
+      // Si c'est une tâche ponctuelle OU un template qui a généré une tâche aujourd'hui
+      if (!isRecurring || selectedDays.length === 0) {
+        // Tâche ponctuelle - ajouter aux MET locales
+        setActiveMETs(prev => [...prev, result.met]);
+        console.log('MET ponctuelle ajoutée aux MET locales');
+      } else if (result.wasGeneratedToday && result.generatedTask) {
+        // Template récurrent avec génération immédiate - ajouter la tâche générée
+        setActiveMETs(prev => [...prev, result.generatedTask]);
+        console.log('Template créé ET tâche générée immédiatement ajoutée aux MET locales');
+      } else {
+        // Template récurrent sans génération aujourd'hui
+        console.log('Template MET créé, pas de génération pour aujourd\'hui');
+      }
+    } else {
+      Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.metCreateError'));
+    }
+  } catch (error) {
+    console.error('Erreur création MET:', error);
+    Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.metCreateError'));
+  }
+};
   // ✅ Supprimer une MIT (désactiver plutôt que supprimer)
   const handleMITDelete = async (itemId) => {
     if (!userProfile?.supabaseId) return;
@@ -622,35 +680,6 @@ export default function JournalScreen({ userProfile }) {
     }
   };
 
-  // ✅ CORRIGÉ: Ajouter une nouvelle MET avec gestion d'is_recurring
-  const handleMETAdd = async (text, isRecurring = true) => {
-    if (!userProfile?.supabaseId || !text.trim()) return;
-
-    try {
-      console.log('Création MET avec données:', {
-        text: text.trim(),
-        isRecurring,
-      });
-
-      const metData = {
-        text: text.trim(),
-        isRecurring: isRecurring,
-        startDate: getDateKey(selectedDate) // ✅ Utiliser la date sélectionnée comme date de début
-      };
-
-      const result = await TaskService.createMET(userProfile.supabaseId, metData);
-      
-      if (result.success) {
-        setActiveMETs(prev => [...prev, result.met]);
-        console.log('Nouvelle MET créée avec is_recurring:', result.met.is_recurring);
-      } else {
-        Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.metCreateError'));
-      }
-    } catch (error) {
-      console.error('Erreur création MET:', error);
-      Alert.alert(t('future.journal.alerts.error'), t('future.journal.alerts.metCreateError'));
-    }
-  };
 
   // ✅ Supprimer une MET
   const handleMETDelete = async (itemId) => {
@@ -812,7 +841,7 @@ export default function JournalScreen({ userProfile }) {
             userProfile={userProfile}
           />
         )}
-
+ 
       </ScrollView>
 
       {/* Animation de succès - Positionnée au niveau de l'écran */}

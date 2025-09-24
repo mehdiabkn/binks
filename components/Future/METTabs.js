@@ -54,24 +54,23 @@ export default function METTab({
     setIsModalVisible(true);
   };
 
-  // ✅ CORRIGÉ: handleSaveTask avec transmission d'isRecurring (comme dans MITTab)
+  // ✅ DANS METTab.js - CORRIGER handleSaveTask (même logique)
 const handleSaveTask = (taskData) => {
-  console.log('📥 METTab - Données reçues:', taskData);
+  console.log('METTab - Données reçues:', taskData);
   
   if (editingTask) {
-    // Mode édition - à implémenter si nécessaire
-    console.log('Édition de tâche MET:', taskData);
+    console.log('Édition de tâche:', taskData);
   } else {
-    // Mode ajout - transmettre isRecurring comme dans MITTab
+    // ✅ PASSER TOUTES LES DONNÉES incluant selectedDays
     onAdd(
-      taskData.text,
-      taskData.isRecurring // ✅ NOUVEAU: Transmission du booléen isRecurring
+      taskData.text, 
+      taskData.isRecurring,
+      taskData.selectedDays // ✅ AJOUT
     );
   }
   setIsModalVisible(false);
   setEditingTask(null);
 };
-
   const handleCloseModal = () => {
     console.log("METTab - Fermeture de la modale");
     setIsModalVisible(false);

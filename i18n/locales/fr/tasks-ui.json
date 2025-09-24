@@ -189,6 +189,14 @@
         "cancel": "Annuler",
         "add": "Ajouter",
         "edit": "Modifier"
+      },
+      
+      "days": {
+        "quickSelect": "Sélection rapide",
+        "weekdays": "Semaine",
+        "weekend": "Weekend",
+        "everyday": "7j/7",
+        "selectDays": "Jours"
       }
     }
   },

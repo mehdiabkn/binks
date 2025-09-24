@@ -2,11 +2,12 @@
 // Créez ce fichier à la racine de votre projet HabitusIOS
 
 const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
+
 
 // 🔥 REMPLACEZ CES VALEURS PAR LES VÔTRES
-const supabaseUrl = 'https://hzlyhvvxeilecqbfjrvk.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6bHlodnZ4ZWlsZWNxYmZqcnZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU0MzY1MjUsImV4cCI6MjA3MTAxMjUyNX0.u7qNdE4--uLNr8DOEkO8anz6EKpi7zVnOahha49Ag_M';
-
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseAnonKey = process.env.SUPABASE_SERVICE_KEY
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function testSupabase() {
