@@ -1,6 +1,7 @@
 // FICHIER: ./scripts/generate-daily-tasks.js
 
 const { createClient } = require('@supabase/supabase-js');
+require('dotenv').config();
 
 // Configuration Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
