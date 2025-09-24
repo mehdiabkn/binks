@@ -1,12 +1,17 @@
 # FICHIER: ./.github/workflows/test-supabase-config.yml
 
-name: Test Supabase Configuration
+name: Test Task Generation
 
 on:
-  workflow_dispatch: # Seulement exécution manuelle
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: 'Date cible (YYYY-MM-DD) - optionnel, défaut: demain'
+        required: false
+        type: string
 
 jobs:
-  test-config:
+  test-generation:
     runs-on: ubuntu-latest
     
     steps:
@@ -24,8 +29,9 @@ jobs:
           npm ci
           npm install @supabase/supabase-js
 
-      - name: Test Supabase connection
+      - name: Generate daily tasks (TEST)
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-        run: node scripts/test-supabase-config.js
+          TARGET_DATE: ${{ github.event.inputs.target_date || '' }}
+        run: node scripts/generate-daily-tasks.js
