@@ -1,5 +1,5 @@
 // FICHIER: ./test-supabase.js
-// Créez ce fichier à la racine de votre projet HabitusIOS
+// Créez ce fichier à la racine de votre projet Habitus
 
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();

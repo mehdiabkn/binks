@@ -786,43 +786,40 @@ static async createMET(userId, metData) {
   // ================================
 
   // ✅ Récupérer les MIT actives d'un utilisateur
-  static async getActiveMITs(userId) {
-    try {
-      console.log('⚡ Récupération MIT actives...', { userId });
-      
-      const today = new Date().toISOString().split('T')[0];
-      
-      const { data, error } = await supabase
-        .from('mits')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .lte('start_date', today)
-        .or(`end_date.is.null,end_date.gte.${today}`)
-        .order('priority', { ascending: false })
-        .order('created_at', { ascending: true });
+static async getActiveMITs(userId) {
+  try {
+    console.log('⚡ Récupération MIT actives...', { userId });
+    
+    const { data, error } = await supabase
+      .from('mits')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      // ✅ SUPPRIMÉ: .lte('start_date', today)
+      // ✅ SUPPRIMÉ: .or(`end_date.is.null,end_date.gte.${today}`)
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: true });
 
-      if (error) {
-        throw error;
-      }
-
-      console.log(`✅ ${data?.length || 0} MIT actives trouvées`);
-      console.log('🔍 Exemple MIT avec is_recurring:', data?.[0]?.is_recurring);
-      
-      return {
-        success: true,
-        mits: data || []
-      };
-
-    } catch (error) {
-      console.error('❌ Erreur récupération MIT:', error);
-      return {
-        success: false,
-        error: error.message,
-        mits: []
-      };
+    if (error) {
+      throw error;
     }
+
+    console.log(`✅ ${data?.length || 0} MIT actives trouvées (toutes dates confondues)`);
+    
+    return {
+      success: true,
+      mits: data || []
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur récupération MIT:', error);
+    return {
+      success: false,
+      error: error.message,
+      mits: []
+    };
   }
+}
 
 
 
@@ -956,41 +953,38 @@ static async createMET(userId, metData) {
 
   // ✅ Récupérer les MET actives d'un utilisateur
   static async getActiveMETs(userId) {
-    try {
-      console.log('🚫 Récupération MET actives...', { userId });
-      
-      const today = new Date().toISOString().split('T')[0];
-      
-      const { data, error } = await supabase
-        .from('mets')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .lte('start_date', today)
-        .or(`end_date.is.null,end_date.gte.${today}`)
-        .order('created_at', { ascending: true });
+  try {
+    console.log('🚫 Récupération MET actives...', { userId });
+    
+    const { data, error } = await supabase
+      .from('mets')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      // ✅ SUPPRIMÉ: .lte('start_date', today)
+      // ✅ SUPPRIMÉ: .or(`end_date.is.null,end_date.gte.${today}`)
+      .order('created_at', { ascending: true });
 
-      if (error) {
-        throw error;
-      }
-
-      console.log(`✅ ${data?.length || 0} MET actives trouvées`);
-      console.log('🔍 Exemple MET avec is_recurring:', data?.[0]?.is_recurring);
-      
-      return {
-        success: true,
-        mets: data || []
-      };
-
-    } catch (error) {
-      console.error('❌ Erreur récupération MET:', error);
-      return {
-        success: false,
-        error: error.message,
-        mets: []
-      };
+    if (error) {
+      throw error;
     }
+
+    console.log(`✅ ${data?.length || 0} MET actives trouvées (toutes dates confondues)`);
+    
+    return {
+      success: true,
+      mets: data || []
+    };
+
+  } catch (error) {
+    console.error('❌ Erreur récupération MET:', error);
+    return {
+      success: false,
+      error: error.message,
+      mets: []
+    };
   }
+}
 
 
 

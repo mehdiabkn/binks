@@ -1,0 +1,3 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace Habitus.xcworkspace -scheme Habitus -configuration Debug -destination "platform=iOS Simulator,name=iPhone 15"
+

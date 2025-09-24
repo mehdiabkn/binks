@@ -214,11 +214,11 @@ const handleSaveTask = (taskData) => {
               >
                 {item.checked ? (
                   <View style={styles.checkedIcon}>
-                    <Frown size={16} color="#FF6B6B" strokeWidth={2.5} />
+                    <Frown size={16} color="#FF6B6B" strokeWidth={2} />
                   </View>
                 ) : (
                   <View style={styles.emptyCheckbox}>
-                    <Target size={12} color="#FF6B6B" strokeWidth={2.5} />
+                    <Target size={12} color="#FF6B6B" strokeWidth={0} />
                   </View>
                 )}
               </TouchableOpacity>

@@ -45,6 +45,9 @@
     const [isSupabaseMode, setIsSupabaseMode] = useState(true);
     const [supabaseError, setSupabaseError] = useState(null);
 
+
+
+
     // ✅ MODIFIÉ: Initialisation avec Supabase en priorité
     useEffect(() => {
       const initializeApp = async () => {

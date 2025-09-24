@@ -104,35 +104,55 @@ export default function JournalScreen({ userProfile }) {
   };
 
   // ✅ CORRIGÉ URGENT: Fonction pour vérifier si une tâche doit être affichée pour une date donnée
-  const shouldShowTaskForDate = (task, targetDate) => {
-    const taskStartDate = new Date(task.start_date || task.created_at);
-    const targetDateOnly = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-    const taskStartDateOnly = new Date(taskStartDate.getFullYear(), taskStartDate.getMonth(), taskStartDate.getDate());
+  // CORRECTION DANS ./screens/JournalScreen.js
 
-    console.log(`🔧 shouldShowTaskForDate: "${parseTaskText(task.text)}" | recurring: ${task.is_recurring} | start: ${taskStartDateOnly.toISOString().split('T')[0]} | target: ${targetDateOnly.toISOString().split('T')[0]}`);
-    
-    // 1. Si la date cible est avant la date de création, ne jamais afficher
-    if (targetDateOnly < taskStartDateOnly) {
-      console.log('Date cible avant création');
-      return false;
-    }
+// ✅ REMPLACER la fonction shouldShowTaskForDate par ceci :
+const shouldShowTaskForDate = (task, targetDate) => {
+  const taskStartDate = new Date(task.start_date || task.created_at);
+  const taskEndDate = task.end_date ? new Date(task.end_date) : null;
+  const targetDateOnly = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const taskStartDateOnly = new Date(taskStartDate.getFullYear(), taskStartDate.getMonth(), taskStartDate.getDate());
+  const taskEndDateOnly = taskEndDate ? new Date(taskEndDate.getFullYear(), taskEndDate.getMonth(), taskEndDate.getDate()) : null;
 
-    // 2. Si la tâche n'est PAS récurrente - afficher SEULEMENT le jour de création
-    if (!task.is_recurring) {
-      const show = targetDateOnly.getTime() === taskStartDateOnly.getTime();
-      console.log(`Tâche ponctuelle: ${show ? 'AFFICHER' : 'MASQUER'}`);
-      return show;
-    }
-
-    // 3. Si la tâche EST récurrente - afficher TOUS les jours à partir de la création
-    if (task.is_recurring) {
-      const show = targetDateOnly >= taskStartDateOnly;
-      console.log(`Tâche récurrente: ${show ? 'AFFICHER' : 'MASQUER'}`);
-      return show;
-    }
-
+  console.log(`🔧 shouldShowTaskForDate: "${parseTaskText(task.text)}" | recurring: ${task.is_recurring} | start: ${taskStartDateOnly.toISOString().split('T')[0]} | end: ${taskEndDateOnly?.toISOString().split('T')[0] || 'null'} | target: ${targetDateOnly.toISOString().split('T')[0]}`);
+  
+  // 1. Si la date cible est avant la date de création, ne jamais afficher
+  if (targetDateOnly < taskStartDateOnly) {
+    console.log('❌ Date cible avant création');
     return false;
-  };
+  }
+
+  // 2. ✅ NOUVEAU: Si la tâche a une end_date ET n'est pas récurrente
+  // C'est probablement une tâche générée par GitHub Action
+  if (!task.is_recurring && taskEndDateOnly) {
+    const show = targetDateOnly >= taskStartDateOnly && targetDateOnly <= taskEndDateOnly;
+    console.log(`✅ Tâche générée (start=end): ${show ? 'AFFICHER' : 'MASQUER'}`);
+    return show;
+  }
+
+  // 3. Si la tâche n'est PAS récurrente et pas de end_date - afficher SEULEMENT le jour de création
+  if (!task.is_recurring && !taskEndDateOnly) {
+    const show = targetDateOnly.getTime() === taskStartDateOnly.getTime();
+    console.log(`📅 Tâche ponctuelle: ${show ? 'AFFICHER' : 'MASQUER'}`);
+    return show;
+  }
+
+  // 4. Si la tâche EST récurrente - afficher TOUS les jours à partir de la création jusqu'à end_date
+  if (task.is_recurring) {
+    let show = targetDateOnly >= taskStartDateOnly;
+    
+    // Vérifier la date de fin si elle existe
+    if (taskEndDateOnly) {
+      show = show && targetDateOnly <= taskEndDateOnly;
+    }
+    
+    console.log(`🔄 Tâche récurrente: ${show ? 'AFFICHER' : 'MASQUER'}`);
+    return show;
+  }
+
+  console.log('❓ Cas non géré, masquer par défaut');
+  return false;
+};
 
   // ✅ Charger les données au montage et quand la date change
   useEffect(() => {

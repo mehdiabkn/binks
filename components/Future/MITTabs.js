@@ -105,9 +105,14 @@ const handleSaveTask = (taskData) => {
     return suggestions[randomIndex];
   };
 
-  const handleToggleItem = (itemId) => {
+  const handleToggleItem = async (itemId) => {
     triggerHapticFeedback();
     onToggle(itemId);
+      // Si la tâche vient d'être complétée (n'était pas complétée avant)
+  if (!wasCompleted) {
+    console.log('🎵 MIT complétée - jouer son de succès');
+    await SoundService.playMITComplete();
+  }
   };
 
   const handleDeleteItem = (itemId) => {
@@ -228,23 +233,29 @@ const handleSaveTask = (taskData) => {
               styles.itemCard,
               item.completed && styles.itemCardCompleted
             ]}>
-              <TouchableOpacity
-                style={styles.checkbox}
-                onPress={() => handleToggleItem(item.id)}
-              >
-                {item.completed ? (
-                  <View style={styles.completedIcon}>
-                    <Check size={14} color="#4CD964" strokeWidth={3} />
-                  </View>
-                ) : (
-                  <View style={[
-                    styles.emptyCheckbox,
-                    { borderColor: getPriorityColor(item.priority) }
-                  ]}>
-                    <Target size={12} color={getPriorityColor(item.priority)} strokeWidth={2.5} />
-                  </View>
-                )}
-              </TouchableOpacity>
+            <TouchableOpacity
+                  style={styles.checkbox}
+                  onPress={() => handleToggleItem(item.id)}
+                >
+                  {item.completed ? (
+                    // ✅ État coché : cercle vert avec checkmark
+                    <View style={styles.completedCheckbox}>
+                      <Check size={16} color="#FFFFFF" strokeWidth={3} />
+                    </View>
+                  ) : (
+                    // ❌ État non coché : cercle vide avec bordure colorée selon priorité
+                    <View style={[
+                      styles.emptyCheckbox,
+                      { borderColor: getPriorityColor(item.priority) }
+                    ]}>
+                      {/* Petit point central pour indiquer qu'on peut cliquer */}
+                      <View style={[
+                        styles.checkboxDot,
+                        { backgroundColor: getPriorityColor(item.priority) }
+                      ]} />
+                    </View>
+                  )}
+            </TouchableOpacity>
               
               <View style={styles.itemContent}>
                 <TouchableOpacity 
